@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\BarangController;
+use App\Http\Controllers\Admin\KategoriController;
+
+use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\KeranjangController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +20,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//role admin
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+    Route::resource('barang', BarangController::class);
+    Route::resource('kategori', KategoriController::class);
+});
+
+Route::resource('dashboard', DashboardController::class);
+Route::resource('keranjang', KeranjangController::class);
+
+
+// example template
 Route::get('/', function () {
     return view('admin.example');
 });
