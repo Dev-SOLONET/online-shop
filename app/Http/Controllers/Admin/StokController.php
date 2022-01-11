@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class BarangController extends Controller
+class StokController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +35,7 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        //simpan foto product di folder public/products
+        //
     }
 
     /**

@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\BarangController;
 use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\StokController;
 
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\KeranjangController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,25 +21,43 @@ use App\Http\Controllers\User\KeranjangController;
 |
 */
 
+// redirect if auth
+Route::get('/', function () {
+
+    if(Auth::user()){
+        if(Auth::user()->role == 'admin'){
+            return redirect()->route('admin.barang.index');
+        }else if(Auth::user()->role == 'user'){
+            return redirect()->route('home.index');
+        }else{
+            return redirect()->route('home.index');
+        }
+    }else{
+        return redirect()->route('home.index');
+    }
+    
+});
+
 //role admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
     Route::resource('barang', BarangController::class);
+    Route::resource('stok', StokController::class);
     Route::resource('kategori', KategoriController::class);
 });
 
-Route::resource('dashboard', DashboardController::class);
+//role user
+Route::resource('home', DashboardController::class);
 Route::resource('keranjang', KeranjangController::class);
 
+Route::get('/auth/login', function () {
+    return view('user.login');
+})->name('auth.login');
 
-// example template
-Route::get('/', function () {
-    return view('admin.example');
-});
+Route::get('/auth/register', function () {
+    return view('user.register');
+})->name('auth.register');
 
-Route::get('/user', function () {
-    return view('user.example');
-});
-
+// jetstream
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');

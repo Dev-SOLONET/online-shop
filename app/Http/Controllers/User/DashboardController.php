@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Barang;
+
 class DashboardController extends Controller
 {
     /**
@@ -12,9 +14,27 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->get('search')){
+
+            $barang     = Barang::where('nama', 'like', '%'.$request->get('search').'%')->get();
+    
+            return view('user.search',[
+                'barang'    => $barang,
+                'keyword'   => $request->get('search')
+            ]);
+
+        }else{
+
+            $barang     = Barang::all();
+    
+            return view('user.dashboard',[
+                'barang'    => $barang
+            ]);
+
+        }
+
     }
 
     /**

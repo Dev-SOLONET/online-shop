@@ -21,6 +21,12 @@
             <li class="nav-item">
               <a class="nav-link" href="icons.html">
                 <i class="ni ni-planet text-orange"></i>
+                <span class="nav-link-text">Stok Barang</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="icons.html">
+                <i class="ni ni-planet text-orange"></i>
                 <span class="nav-link-text">Barang</span>
               </a>
             </li>
