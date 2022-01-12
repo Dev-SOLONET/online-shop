@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="Creative Tim">
     <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
     <!-- Favicon -->
@@ -16,6 +17,8 @@
     <link rel="stylesheet" href="{{ url('argon/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" type="text/css">
     <!-- Argon CSS -->
     <link rel="stylesheet" href="{{ url('argon/assets/css/argon.css?v=1.2.0') }}" type="text/css">
+
+    @yield('css')
 </head>
 
 <body>
@@ -104,8 +107,11 @@
     <script src="{{ url('argon/assets/vendor/js-cookie/js.cookie.js') }}"></script>
     <script src="{{ url('argon/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js') }}"></script>
     <script src="{{ url('argon/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js') }}"></script>
+    <script src="{{ url('css/font-awesome.min.css') }}"></script>
     <!-- Argon JS -->
     <script src="{{ url('argon/assets/js/argon.js?v=1.2.0') }}"></script>
+
+    @yield('js')
 </body>
 
 </html>

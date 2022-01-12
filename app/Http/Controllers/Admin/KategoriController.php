@@ -2,19 +2,40 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Barang;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 
-class KategoriController extends Controller
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
+class KategoriController 
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        // $data = Kategori::select('id','nama','keterangan')->get();
+        // return $data;
+        //datatable
+        if (request()->ajax()) {
+            $data = Kategori::select('id','nama','keterangan')->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                        $actionBtn = '
+                            <center>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Edit" onclick="edit(' . $row->id . ')"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="delete_data(' . $row->id . ')"><i class="fas fa-trash"></i></a>
+                            </center>';
+
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('kategori.index',[
+            'title'     => 'Kategori'
+        ]);
     }
 
     /**
@@ -35,10 +56,25 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'nama'        => 'required'
+        ]);
+
+        if ($validator->fails())
+        {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
+        Kategori::updateOrCreate(['id' => $request->id],
+                [
+                    'nama'          => $request->nama,
+                    'keterangan'    => $request->keterangan,
+                ]);   
+   
+        return response()->json(['status'=> true]);
     }
 
-    /**
+     /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -46,30 +82,28 @@ class KategoriController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Kategori::find($id);
+        return response()->json($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function updateKategori(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            'nama' => 'required|min:2',
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        if ($validator->fails())
+        {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+
+        Kategori::find($request->id)->update([
+                    'nama'         => $request->nama,
+                    'keterangan'   => $request->keterangan,
+                ]);    
+        
+        return response()->json(['status'=> true]);
     }
 
     /**
@@ -80,6 +114,13 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $ceksatuan = Barang::where('id_kategori',$id)->get();
+
+        if($ceksatuan = $id){
+            return response()->json(['status'=> false]);
+        }else{
+            Kategori::find($id)->delete();
+            return response()->json(['status'=> true]);
+        }
     }
 }
