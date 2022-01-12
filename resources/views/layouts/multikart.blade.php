@@ -180,6 +180,7 @@
                         if(data.status){
                             sukses();
                             show_cart();
+                            table.ajax.reload(null,false);
                         }else{
                             console.log(data);
                         }
