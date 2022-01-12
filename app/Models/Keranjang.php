@@ -11,9 +11,14 @@ class Keranjang extends Model
     
     protected $fillable = [
         'id_user',
-        'id_barang',
+        'id_detail_barang',
         'qty',
     ];
+
+    public function detail_barang()
+    {
+        return $this->hasOne(Detail_barang::class,'id','id_detail_barang');
+    }
 
     protected $table = 'keranjang';
 

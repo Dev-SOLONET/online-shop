@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Barang;
+use App\Models\Detail_barang;
+use App\Models\Kategori;
+use Facade\FlareClient\Http\Response;
 
 class DashboardController extends Controller
 {
@@ -18,8 +21,10 @@ class DashboardController extends Controller
     {
         if($request->get('search')){
 
-            $barang     = Barang::where('nama', 'like', '%'.$request->get('search').'%')->get();
-    
+            $barang     = Barang::with(['one_detail_barang' => function($query){
+                                $query->where('detail_barang.stok', '>', '0');
+                            }])->where('nama', 'like', '%'.$request->get('search').'%')->get();
+
             return view('user.search',[
                 'barang'    => $barang,
                 'keyword'   => $request->get('search')
@@ -27,10 +32,15 @@ class DashboardController extends Controller
 
         }else{
 
-            $barang     = Barang::all();
-    
+            $barang     = Barang::with(['one_detail_barang' => function($query){
+                                        $query->where('detail_barang.stok', '>', '0');
+                                    }])->get();
+
+            $kategori   = Kategori::with('barang.one_detail_barang')->limit(3)->get();
+
             return view('user.dashboard',[
-                'barang'    => $barang
+                'barang'    => $barang,
+                'kategori'  => $kategori
             ]);
 
         }
@@ -64,9 +74,17 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $barang         = Barang::with(['many_detail_barang','kategori'])->where('slug', $slug)->first();
+        $relate_barang  = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->get();
+        $new_barang     = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->orderBy('created_at')->limit(3)->get();
+
+        return view('user.product-detail',[
+            'barang'    => $barang,
+            'relate'    => $relate_barang,
+            'new'       => $new_barang,
+        ]);
     }
 
     /**
@@ -75,9 +93,16 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        //get price product by size
+
+        $data = Detail_barang::where('size', $id)->where('id_barang', $request->get('id_barang'))->first();
+
+        return Response()->json([
+            'price'     => number_format($data->harga),
+            'discount'  => number_format($data->harga * 1.5)
+        ]);
     }
 
     /**

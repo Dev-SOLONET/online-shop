@@ -11,7 +11,7 @@ class Detail_penjualan extends Model
 
     protected $fillable = [
         'kode_penjualan',
-        'id_barang',
+        'id_detail_barang',
         'qty',
         'harga'
     ];

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Detail_barang;
 use Illuminate\Http\Request;
+use App\Models\Keranjang;
+use Facade\FlareClient\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class KeranjangController extends Controller
 {
@@ -35,7 +39,29 @@ class KeranjangController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $id_detail_barang   = Detail_barang::where('id_barang', $request->id_barang)->where('size', $request->size)->first();
+        
+        $cek                = Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->first();
+        
+        if($cek){
+
+            Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->update([
+                'qty'           => $request->qty + $cek->qty,
+            ]);
+
+        }else{
+
+            Keranjang::create([
+                'id_user'               => '1',
+                'id_detail_barang'      => $id_detail_barang->id,
+                'qty'                   => $request->qty,
+            ]);
+
+        }
+
+
+        return Response()->json(['status' => true]);
     }
 
     /**
@@ -46,7 +72,9 @@ class KeranjangController extends Controller
      */
     public function show($id)
     {
-        //
+        $data   = Keranjang::with('detail_barang.barang')->where('id_user', '1')->get();
+
+        return Response()->json($data);
     }
 
     /**

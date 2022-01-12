@@ -23,6 +23,15 @@
             <div class="col-lg-6">
                 <h3>Login</h3>
                 <div class="theme-card">
+                    @if (count($errors) > 0)
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form class="theme-form" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="form-group">
