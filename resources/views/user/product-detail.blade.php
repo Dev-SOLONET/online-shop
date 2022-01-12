@@ -85,8 +85,8 @@
                                         <span class="badge badge-grey-color">#{{ rand(1,20) }} Best seller</span>
                                         <span class="label-text">Pada kategori fashion</span>
                                     </div>
-                                    <h3 class="price-detail">Rp. {{ number_format($barang->one_detail_barang->harga) }}
-                                        <del>Rp. {{ number_format($barang->one_detail_barang->harga * 1.5) }}</del>
+                                    <h3 class="price-detail">Rp. {{ number_format($barang->many_detail_barang[0]->harga) }}
+                                        <del>Rp. {{ number_format($barang->many_detail_barang[0]->harga * 1.5) }}</del>
                                     </h3>
                                     <ul class="color-variant">
                                         <li class="bg-light0 active"></li>
@@ -98,10 +98,9 @@
                                         <h6 class="error-message">Pilih Ukuran</h6>
                                         <div class="size-box">
                                             <ul>
-                                                <li><a href="javascript:void(0)">s</a></li>
-                                                <li><a href="javascript:void(0)">m</a></li>
-                                                <li><a href="javascript:void(0)">l</a></li>
-                                                <li><a href="javascript:void(0)">xl</a></li>
+                                                @foreach ($barang->many_detail_barang as $size)
+                                                <li><a href="javascript:void(0)">{{ $size->size }}</a></li>
+                                                @endforeach
                                             </ul>
                                         </div>
                                         <h6 class="product-title">Jumlah</h6>
