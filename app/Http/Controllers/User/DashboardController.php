@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Barang;
+use App\Models\Kategori;
 
 class DashboardController extends Controller
 {
@@ -18,8 +19,10 @@ class DashboardController extends Controller
     {
         if($request->get('search')){
 
-            $barang     = Barang::where('nama', 'like', '%'.$request->get('search').'%')->get();
-    
+            $barang     = Barang::with(['one_detail_barang' => function($query){
+                                $query->where('detail_barang.stok', '>', '0');
+                            }])->where('nama', 'like', '%'.$request->get('search').'%')->get();
+
             return view('user.search',[
                 'barang'    => $barang,
                 'keyword'   => $request->get('search')
@@ -27,10 +30,15 @@ class DashboardController extends Controller
 
         }else{
 
-            $barang     = Barang::all();
-    
+            $barang     = Barang::with(['one_detail_barang' => function($query){
+                                        $query->where('detail_barang.stok', '>', '0');
+                                    }])->get();
+
+            $kategori   = Kategori::with('barang.one_detail_barang')->limit(3)->get();
+
             return view('user.dashboard',[
-                'barang'    => $barang
+                'barang'    => $barang,
+                'kategori'  => $kategori
             ]);
 
         }
@@ -64,9 +72,17 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $barang         = Barang::with('many_detail_barang')->where('slug', $slug)->first();
+        $relate_barang  = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->get();
+        $new_barang     = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->orderBy('created_at')->limit(3)->get();
+
+        return view('user.product-detail',[
+            'barang'    => $barang,
+            'relate'    => $relate_barang,
+            'new'       => $new_barang,
+        ]);
     }
 
     /**

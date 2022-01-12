@@ -11,6 +11,7 @@ class Barang extends Model
 
     protected $fillable = [
         'nama',
+        'slug',
         'id_kategori',
         'foto_cover',
         'foto_hover',
@@ -18,4 +19,14 @@ class Barang extends Model
     ];
 
     protected $table = 'barang';
+
+    public function one_detail_barang()
+    {
+        return $this->hasOne(Detail_barang::class,'id_barang');
+    }
+
+    public function many_detail_barang()
+    {
+        return $this->hasMany(Detail_barang::class,'id_barang');
+    }
 }

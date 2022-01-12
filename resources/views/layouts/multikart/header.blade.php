@@ -99,9 +99,9 @@
                                                     <div class="container">
                                                         <div class="row">
                                                             <div class="col-xl-12">
-                                                                <form>
+                                                                <form action="{{ route('home.index') }}" method="GET">
                                                                     <div class="form-group">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="text" name="search" class="form-control"
                                                                             id="exampleInputPassword1"
                                                                             placeholder="Search a Product">
                                                                     </div>

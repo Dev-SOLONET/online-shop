@@ -16,6 +16,7 @@ class CreateBarangsTable extends Migration
         Schema::create('barang', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
+            $table->string('slug')->unique();
             $table->integer('id_kategori');
             $table->text('foto_cover')->nullable();
             $table->text('foto_hover')->nullable();
