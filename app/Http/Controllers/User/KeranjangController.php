@@ -108,6 +108,7 @@ class KeranjangController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Keranjang::find($id)->delete();
+        return Response()->json(['status' => true]);
     }
 }
