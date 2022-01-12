@@ -73,10 +73,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="form" action="" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_barang" id="id_barang" value="{{ $barang->id }}">
                             <div class="col-lg-6 rtl-text">
+                                <form id="form" action="" method="POST">
+                                @csrf
+                                <input type="hidden" name="id_barang" id="id_barang" value="{{ $barang->id }}">
                                 <div class="product-right">
                                     <h2>{{ $barang->nama }}</h2>
                                     <div class="rating-section">
@@ -259,7 +259,8 @@
             data: $('#form').serialize(),
             dataType: "JSON",
             success: function(data){
-                console.log(data);
+                sukses();
+                show_cart();
             },
             error: function (jqXHR, textStatus , errorThrown){ 
                 alert(errorThrown);

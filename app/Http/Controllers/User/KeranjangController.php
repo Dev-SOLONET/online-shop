@@ -41,20 +41,21 @@ class KeranjangController extends Controller
     {
 
         $id_detail_barang   = Detail_barang::where('id_barang', $request->id_barang)->where('size', $request->size)->first();
-
-        $cek                = Keranjang::where('id_user', '1')->where('id_barang', $id_detail_barang->id)->first();
+        
+        $cek                = Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->first();
+        
         if($cek){
 
-            Keranjang::where('id_user', '1')->where('id_barang', $id_detail_barang->id)->update([
+            Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->update([
                 'qty'           => $request->qty + $cek->qty,
             ]);
 
         }else{
 
             Keranjang::create([
-                'id_user'       => '1',
-                'id_barang'     => $id_detail_barang->id,
-                'qty'           => $request->qty,
+                'id_user'               => '1',
+                'id_detail_barang'      => $id_detail_barang->id,
+                'qty'                   => $request->qty,
             ]);
 
         }
@@ -71,7 +72,7 @@ class KeranjangController extends Controller
      */
     public function show($id)
     {
-        $data   = Keranjang::with('barang')->where('id_user', '1')->get();
+        $data   = Keranjang::with('detail_barang.barang')->where('id_user', '1')->get();
 
         return Response()->json($data);
     }

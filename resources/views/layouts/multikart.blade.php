@@ -36,6 +36,8 @@
     <!-- Theme css -->
     <link rel="stylesheet" type="text/css" href="{{ url('multikart/assets/css/style.css') }}">
 
+    <link rel="stylesheet" href="{{ url('vendor/sweetalert2/sweetalert2.min.css') }}">
+
     @yield('css')
 
 </head>
@@ -88,6 +90,11 @@
     <!-- Theme js-->
     <script src="{{ url('multikart/assets/js/script.js') }}"></script>
 
+    <script src="{{ url('vendor/sweetalert2/sweetalert2.min.js')}}"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js" integrity="sha512-3z5bMAV+N1OaSH+65z+E0YCCEzU8fycphTBaOWkvunH9EtfahAlcJqAVN2evyg0m7ipaACKoVk6S9H2mEewJWA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         $(window).on('load', function () {
             setTimeout(function () {
@@ -106,34 +113,55 @@
     </script>
 
     <script>
-        $(document).ready(function() { 
+        let text  = "";
+        let total = 0;
 
-            let text = "";
-    
+        $(document).ready(function() { 
+            show_cart();
+        });
+
+        function show_cart(){
             $.ajax({
                 url : "/keranjang/1",
                 type: "GET",
                 dataType: "JSON",
                 success: function(data) {
-                    console.log(data);
+                    //reset variable
+                    text = "";
+                    total = 0;
+                    //show cart
                     const keranjang = data;
-                    keranjang.forEach(showKeranjang);
+                    $("#cart_qty_product").text(data.length);
+                    keranjang.forEach(loopCart);
                     document.getElementById("class-keranjang").innerHTML = text;
+                    $("#cart_total").number(total);
+
                 },
                 error: function (jqXHR, textStatus , errorThrown) {
                     console.log(errorThrown);
                 }
             });
-
-            function showKeranjang(item, index) {
-                text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.barang.nama+'</h4></a><h4><span>1 x $ 299.00</span></h4></div></div><div class="close-circle"><a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></div></li>';
-            }
-
-        });
-
+        }
         
+        function loopCart(item, index) {
+            text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.detail_barang.barang.nama+'</h4></a><h4><span>'+item.qty+' x Rp. '+item.detail_barang.harga+'</span></h4></div></div><div class="close-circle"><a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></div></li>';
+            total += item.detail_barang.harga * item.qty;
+        }
 
-    </script>
+        function sukses() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+                });
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil !'
+            })
+        }
+
+        </script>
 
     @yield('js')
 

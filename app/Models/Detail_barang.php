@@ -16,6 +16,11 @@ class Detail_barang extends Model
         'stok',
     ];
 
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class,'id_barang');
+    }
+
     protected $table = 'detail_barang';
 
 }
