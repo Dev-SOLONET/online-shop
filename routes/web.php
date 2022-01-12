@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\StokController;
 
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\KeranjangController;
+use App\Http\Controllers\User\CheckoutController;
+
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -48,6 +50,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
 //role user
 Route::resource('home', DashboardController::class);
 Route::resource('keranjang', KeranjangController::class);
+Route::resource('checkout', CheckoutController::class);
 
 Route::get('/auth/login', function () {
     return view('user.login');

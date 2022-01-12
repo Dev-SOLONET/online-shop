@@ -132,7 +132,7 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="buttons"><a href="{{ route('keranjang.index') }}" class="view-cart">Lihat Keranjang</a> <a href="#" class="checkout">Checkout</a></div>
+                                                <div class="buttons"><a href="{{ route('keranjang.index') }}" class="view-cart">Lihat Keranjang</a> <a href="{{ route('checkout.index') }}" class="checkout">Checkout</a></div>
                                             </li>
                                         </ul>
                                     </li>

@@ -53,7 +53,7 @@
         </div>
         <div class="row cart-buttons">
             <div class="col-6"><a href="{{ route('home.index') }}" class="btn btn-solid">Lanjut Belanja</a></div>
-            <div class="col-6"><a href="#" class="btn btn-solid">checkout</a></div>
+            <div class="col-6"><a href="{{ route('checkout.index') }}" class="btn btn-solid">checkout</a></div>
         </div>
     </div>
 </section>
