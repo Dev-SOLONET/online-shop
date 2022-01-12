@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Barang;
+use App\Models\Detail_barang;
 use App\Models\Kategori;
+use Facade\FlareClient\Http\Response;
 
 class DashboardController extends Controller
 {
@@ -74,7 +76,7 @@ class DashboardController extends Controller
      */
     public function show($slug)
     {
-        $barang         = Barang::with('many_detail_barang')->where('slug', $slug)->first();
+        $barang         = Barang::with(['many_detail_barang','kategori'])->where('slug', $slug)->first();
         $relate_barang  = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->get();
         $new_barang     = Barang::with('one_detail_barang')->where('nama', 'like', '%'.$barang->nama.'%')->orderBy('created_at')->limit(3)->get();
 
@@ -91,9 +93,16 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        //
+        //get price product by size
+
+        $data = Detail_barang::where('size', $id)->where('id_barang', $request->get('id_barang'))->first();
+
+        return Response()->json([
+            'price'     => number_format($data->harga),
+            'discount'  => number_format($data->harga * 1.5)
+        ]);
     }
 
     /**

@@ -29,7 +29,8 @@
                             <div>
                                 @foreach ($new as $terbaru)
                                 <div class="media">
-                                    <a href="{{ route('home.show', $terbaru->slug )}}"><img class="img-fluid blur-up lazyload"
+                                    <a href="{{ route('home.show', $terbaru->slug )}}"><img
+                                            class="img-fluid blur-up lazyload"
                                             src="{{ url('multikart/assets/images/fashion/pro/1.jpg') }} " alt=""></a>
                                     <div class="media-body align-self-center">
                                         <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
@@ -72,6 +73,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <form id="form" action="" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_barang" id="id_barang" value="{{ $barang->id }}">
                             <div class="col-lg-6 rtl-text">
                                 <div class="product-right">
                                     <h2>{{ $barang->nama }}</h2>
@@ -83,10 +87,11 @@
                                     </div>
                                     <div class="label-section">
                                         <span class="badge badge-grey-color">#{{ rand(1,20) }} Best seller</span>
-                                        <span class="label-text">Pada kategori fashion</span>
+                                        <span class="label-text">Pada kategori {{ $barang->kategori->nama }}</span>
                                     </div>
-                                    <h3 class="price-detail">Rp. {{ number_format($barang->many_detail_barang[0]->harga) }}
-                                        <del>Rp. {{ number_format($barang->many_detail_barang[0]->harga * 1.5) }}</del>
+                                    <h3 class="price-detail">
+                                        <h3>Rp. <span id="price_product">{{ number_format($barang->many_detail_barang[0]->harga) }}</span></h3>
+                                        <h5>Rp. <del><span id="discount_product">{{ number_format($barang->many_detail_barang[0]->harga * 1.5) }}</span></del></h5>
                                     </h3>
                                     <ul class="color-variant">
                                         <li class="bg-light0 active"></li>
@@ -94,13 +99,20 @@
                                         <li class="bg-light2"></li>
                                     </ul>
                                     <div id="selectSize" class="addeffect-section product-description border-product">
-
-                                        <h6 class="error-message">Pilih Ukuran</h6>
                                         <div class="size-box">
                                             <ul>
-                                                @foreach ($barang->many_detail_barang as $size)
-                                                <li><a href="javascript:void(0)">{{ $size->size }}</a></li>
-                                                @endforeach
+                                                <div class="row">
+                                                    <div class="col-md-3 col-12">
+                                                        <div class="form-group">
+                                                            <label>Pilih Ukuran</label>
+                                                            <select class="form-control" id="dropdown-size" name="size">
+                                                                @foreach ($barang->many_detail_barang as $size)
+                                                                <option value="{{ $size->size }}">{{ $size->size }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </ul>
                                         </div>
                                         <h6 class="product-title">Jumlah</h6>
@@ -108,17 +120,18 @@
                                             <div class="input-group"><span class="input-group-prepend"><button
                                                         type="button" class="btn quantity-left-minus" data-type="minus"
                                                         data-field=""><i class="ti-angle-left"></i></button> </span>
-                                                <input type="text" name="quantity" class="form-control input-number"
+                                                <input type="text" name="qty" class="form-control input-number"
                                                     value="1"> <span class="input-group-prepend"><button type="button"
                                                         class="btn quantity-right-plus" data-type="plus"
                                                         data-field=""><i class="ti-angle-right"></i></button></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="product-buttons"><a href="javascript:void(0)" id="cartEffect"
+                                    <div class="product-buttons">
+                                        <button type="button" onclick="add_cart()" id="cartEffect"
                                             class="btn btn-solid hover-solid btn-animation"><i
                                                 class="fa fa-shopping-cart" aria-hidden="true"></i> Masukan
-                                            Keranjang</a> </div>
+                                            Keranjang</button> </div>
                                     <div class="product-count">
                                         <ul>
                                             <li>
@@ -130,6 +143,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -177,11 +191,13 @@
                 <div class="product-box">
                     <div class="img-wrapper">
                         <div class="front">
-                            <a href="{{ route('home.show', $result->slug )}}"><img src="{{ url('multikart/assets/images/pro3/33.jpg') }} "
+                            <a href="{{ route('home.show', $result->slug )}}"><img
+                                    src="{{ url('multikart/assets/images/pro3/33.jpg') }} "
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="back">
-                            <a href="{{ route('home.show', $result->slug )}}"><img src="{{ url('multikart/assets/images/pro3/34.jpg') }} "
+                            <a href="{{ route('home.show', $result->slug )}}"><img
+                                    src="{{ url('multikart/assets/images/pro3/34.jpg') }} "
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="cart-info cart-wrap">
@@ -213,4 +229,42 @@
 </section>
 <!-- related products -->
 
+@endsection
+
+@section('js')
+<script>
+    $("#dropdown-size").change(function () {
+        var size = this.value;
+        var id_barang = $("#id_barang").val();
+
+        $.ajax({
+            url : "/home/" + size + "/edit?id_barang=" + id_barang,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                $("#price_product").text(data.price);
+                $("#discount_product").text(data.discount);
+            },
+            error: function (jqXHR, textStatus , errorThrown) {
+                console.log(errorThrown);
+            }
+        });
+
+    });
+
+    function add_cart(){
+        $.ajax({
+            url : "{{ route('keranjang.store') }}",
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data){
+                console.log(data);
+            },
+            error: function (jqXHR, textStatus , errorThrown){ 
+                alert(errorThrown);
+            }
+        });
+    }
+</script>
 @endsection

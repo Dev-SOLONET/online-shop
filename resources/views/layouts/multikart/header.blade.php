@@ -121,6 +121,11 @@
                                                 class="ti-shopping-cart"></i></div>
                                         <span class="cart_qty_cls">2</span>
                                         <ul class="show-div shopping-cart">
+
+                                            <div id="class-keranjang">
+                                                
+                                            </div>
+
                                             <li>
                                                 <div class="media">
                                                     <a href="#"><img alt="" class="me-3"

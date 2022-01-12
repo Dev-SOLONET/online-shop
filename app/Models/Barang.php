@@ -29,4 +29,9 @@ class Barang extends Model
     {
         return $this->hasMany(Detail_barang::class,'id_barang');
     }
+
+    public function kategori()
+    {
+        return $this->hasOne(Kategori::class,'id','id_kategori');
+    }
 }

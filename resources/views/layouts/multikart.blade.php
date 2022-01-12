@@ -36,7 +36,7 @@
     <!-- Theme css -->
     <link rel="stylesheet" type="text/css" href="{{ url('multikart/assets/css/style.css') }}">
 
-
+    @yield('css')
 
 </head>
 
@@ -104,6 +104,38 @@
         }
 
     </script>
+
+    <script>
+        $(document).ready(function() { 
+
+            let text = "";
+    
+            $.ajax({
+                url : "/keranjang/1",
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+                    console.log(data);
+                    const keranjang = data;
+                    keranjang.forEach(showKeranjang);
+                    document.getElementById("class-keranjang").innerHTML = text;
+                },
+                error: function (jqXHR, textStatus , errorThrown) {
+                    console.log(errorThrown);
+                }
+            });
+
+            function showKeranjang(item, index) {
+                text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.barang.nama+'</h4></a><h4><span>1 x $ 299.00</span></h4></div></div><div class="close-circle"><a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></div></li>';
+            }
+
+        });
+
+        
+
+    </script>
+
+    @yield('js')
 
 </body>
 
