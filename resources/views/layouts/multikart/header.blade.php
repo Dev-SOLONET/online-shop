@@ -19,7 +19,7 @@
                             {{ Auth::user()->name }}
                             <ul class="onhover-show-div">
                                 <li><a href="/user/profile">Profile</a></li>
-                                <li><a href="{{ route('auth.login') }}">Logout</a></li>
+                                <li><a href="{{ route('login') }}">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -28,8 +28,8 @@
                         <li class="onhover-dropdown mobile-account"> <i class="fa fa-user" aria-hidden="true"></i>
                             Akun
                             <ul class="onhover-show-div">
-                                <li><a href="{{ route('auth.login') }}">Login</a></li>
-                                <li><a href="{{ route('auth.register') }}">Register</a></li>
+                                <li><a href="{{ route('login') }}">Login</a></li>
+                                <li><a href="{{ route('register') }}">Register</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -132,7 +132,7 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="buttons"><a href="cart.html" class="view-cart">Lihat Keranjang</a> <a href="#" class="checkout">Checkout</a></div>
+                                                <div class="buttons"><a href="{{ route('keranjang.index') }}" class="view-cart">Lihat Keranjang</a> <a href="{{ route('checkout.index') }}" class="checkout">Checkout</a></div>
                                             </li>
                                         </ul>
                                     </li>

@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="multikart">
     <meta name="keywords" content="multikart">
     <meta name="author" content="multikart">
@@ -117,6 +118,12 @@
         let total = 0;
 
         $(document).ready(function() { 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             show_cart();
         });
 
@@ -144,8 +151,52 @@
         }
         
         function loopCart(item, index) {
-            text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.detail_barang.barang.nama+'</h4></a><h4><span>'+item.qty+' x Rp. '+item.detail_barang.harga+'</span></h4></div></div><div class="close-circle"><a href="#"><i class="fa fa-times" aria-hidden="true"></i></a></div></li>';
+            text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.detail_barang.barang.nama+'</h4></a><h4><span>'+item.qty+' x Rp. '+item.detail_barang.harga+'</span></h4></div></div><div class="close-circle"><a href="#"><i onclick="remove_cart('+item.id+')" class="fa fa-times" aria-hidden="true"></i></a></div></li>';
             total += item.detail_barang.harga * item.qty;
+        }
+
+        function remove_cart(id){
+            const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                confirmButton: 'btn btn-success',
+                cancelButton: 'btn btn-danger'
+                },
+            })
+            swalWithBootstrapButtons.fire({
+                title: 'Konfirmasi !',
+                text: "Anda Akan Menghapus Data ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hapus !',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.value) {
+                $.ajax({
+                    url : "/keranjang/" + id,
+                    type: "DELETE",
+                    dataType: "JSON",
+                    success: function(data){
+                        if(data.status){
+                            sukses();
+                            show_cart();
+                            table.ajax.reload(null,false);
+                        }else{
+                            console.log(data);
+                        }
+                    },
+                    error: function (jqXHR, textStatus , errorThrown){ 
+                        console.log(errorThrown);
+                    }
+                })
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                swalWithBootstrapButtons.fire(
+                    'Batal',
+                    'Data tidak dihapus',
+                    'error'
+                )
+                }
+            })
         }
 
         function sukses() {

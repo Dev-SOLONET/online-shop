@@ -263,7 +263,7 @@
                 show_cart();
             },
             error: function (jqXHR, textStatus , errorThrown){ 
-                alert(errorThrown);
+                console.log(errorThrown);
             }
         });
     }
