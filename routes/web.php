@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\Auth;
 Route::resource('kategori', KategoriController::class);
 Route::post('/kategori/update', [KategoriController::class, 'updateKategori'])->name('/kategori/update');
 
+Route::resource('stok', StokController::class);
+Route::post('/stok/update', [StokController::class, 'updateStok'])->name('/stok/update');
+
 
 // redirect if auth
 Route::get('/', function () {
