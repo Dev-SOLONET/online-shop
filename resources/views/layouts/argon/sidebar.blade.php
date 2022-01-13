@@ -25,7 +25,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="icons.html">
+              <a class="nav-link" href="{{ route('barang.index') }}">
                 <i class="ni ni-planet text-orange"></i>
                 <span class="nav-link-text">Barang</span>
               </a>

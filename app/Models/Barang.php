@@ -20,6 +20,11 @@ class Barang extends Model
 
     protected $table = 'barang';
 
+    public function kategori()
+    {
+        return $this->BelongsTo(Kategori::class,'id_kategori');
+    }
+
     public function one_detail_barang()
     {
         return $this->hasOne(Detail_barang::class,'id_barang');
@@ -30,8 +35,4 @@ class Barang extends Model
         return $this->hasMany(Detail_barang::class,'id_barang');
     }
 
-    public function kategori()
-    {
-        return $this->hasOne(Kategori::class,'id','id_kategori');
-    }
 }

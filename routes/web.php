@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Auth;
 
 Route::resource('kategori', KategoriController::class);
 Route::post('/kategori/update', [KategoriController::class, 'updateKategori'])->name('/kategori/update');
+Route::resource('barang', BarangController::class);
+Route::post('/barang/update', [BarangController::class, 'updateBarang'])->name('/barang/update');
+
 
 
 // redirect if auth
@@ -46,7 +49,7 @@ Route::get('/', function () {
 
 //role admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
-    Route::resource('barang', BarangController::class);
+    // Route::resource('barang', BarangController::class);
     Route::resource('stok', StokController::class);
     Route::resource('kategori', KategoriController::class);
 });
