@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::resource('kategori', KategoriController::class);
+Route::post('/kategori/update', [KategoriController::class, 'updateKategori'])->name('/kategori/update');
+
+
 // redirect if auth
 Route::get('/', function () {
 
