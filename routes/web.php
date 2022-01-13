@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\StokController;
 
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\KeranjangController;
+use App\Http\Controllers\User\CheckoutController;
+
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -51,15 +53,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
 
 //role user
 Route::resource('home', DashboardController::class);
-Route::resource('keranjang', KeranjangController::class);
 
-Route::get('/auth/login', function () {
-    return view('user.login');
-})->name('auth.login');
-
-Route::get('/auth/register', function () {
-    return view('user.register');
-})->name('auth.register');
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::resource('keranjang', KeranjangController::class);
+    Route::resource('checkout', CheckoutController::class);
+});
 
 // jetstream
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
