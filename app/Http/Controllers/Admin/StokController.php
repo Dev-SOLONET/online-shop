@@ -97,7 +97,6 @@ class StokController
     {
         $validator = Validator::make($request->all(), [
             'id'        => 'required',
-            'id_barang' => 'required|min:2',
         ]);
 
         if ($validator->fails())

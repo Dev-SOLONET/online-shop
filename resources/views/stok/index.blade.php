@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <h4 class="header-title">Data Stok</h4>
+                            <h4 class="header-title">Data Stok Barang</h4>
                         </div>
                         <div class="col-md-6 col-12">
                        
@@ -134,6 +134,19 @@
       });
     }
 
+    function sukses() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+                });
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil !'
+            })
+        }
+
     function add(){
       tipe = "add";
       $('#form')[0].reset(); // reset form on modals
@@ -145,7 +158,7 @@
     function edit(id){
         tipe = "update";
         $('#form')[0].reset(); // reset form on modals
-        $('#id_barang').html("");
+        $('#size').html("");
         //Ajax Load data from ajax
         $.ajax({
         url : "stok/" + id,
@@ -191,7 +204,7 @@
                 if(data.status){
                 console.log(status);
                 reload_table();
-                sukseshapus();
+                sukses();
                 }else{
                     alert('Data tidak boleh dihapus');
                 }

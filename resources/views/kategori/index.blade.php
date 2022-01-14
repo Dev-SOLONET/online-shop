@@ -99,6 +99,19 @@
             table.ajax.reload(null,false);
         }   
 
+        function sukses() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+                });
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil !'
+            })
+        }
+
     function save(){
 
         if(tipe == "add"){
@@ -185,7 +198,7 @@
                 if(data.status){
                 console.log(status);
                 reload_table();
-                sukseshapus();
+                sukses();
                 }else{
                     alert('Data tidak boleh dihapus');
                 }

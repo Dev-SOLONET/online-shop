@@ -14,8 +14,6 @@ class KategoriController
 {
     public function index()
     {
-        // $data = Kategori::select('id','nama','keterangan')->get();
-        // return $data;
         //datatable
         if (request()->ajax()) {
             $data = Kategori::select('id','nama','keterangan')->get();
