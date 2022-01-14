@@ -21,7 +21,8 @@
     <div class="container">
         <div class="checkout-page">
             <div class="checkout-form">
-                <form>
+                <form action="" method="POST">
+
                     <div class="row">
                         <div class="col-lg-6 col-sm-12 col-xs-12">
                             <div class="checkout-title">
@@ -93,11 +94,12 @@
                                         @endforeach
                                     </ul>
                                     <ul class="sub-total">
+                                        <input type="hidden" id="subtotal_keranjang" value="{{ $subtotal }}">
                                         <li>Subtotal <span class="count">Rp. <span id="subtotal_checkout">{{ number_format($subtotal) }}</span></span></li>
-                                        <li>Ongkir <span class="count">Rp. <span id="total_ongkir"></span></span></li>
+                                        <li>Ongkir <span class="count">Rp. <span id="total_ongkir">0</span></span></li>
                                     </ul>
-                                    <ul class="total">
-                                        <li>Total <span class="count">Rp. <span id="total_checkout"></span></span></li>
+                                    <ul class="sub-total">
+                                        <li>Total <span class="count">Rp. <span id="total_checkout">0</span></span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -118,6 +120,9 @@
         document.getElementById("kota").disabled = true;
         document.getElementById("kurir").disabled = true;
         document.getElementById("service").disabled = true;
+
+        $("#total_checkout").number($('#subtotal_keranjang').val());
+
     });
 
     $('#prov').change(function() {
@@ -176,16 +181,13 @@
     });
 
     $('#service').change(function() {
-        var cost = $(this).val();
-        var subtotal = $('#subtotal_checkout').text();
+        var cost        = $(this).val();
+        var subtotal    = $('#subtotal_keranjang').val();
 
-        console.log(parseInt(subtotal));
-        
-        var totalCheckout = cost + subtotal;
+        var totalCheckout = parseInt(cost) + parseInt(subtotal);
         
         $("#total_ongkir").number(cost);
         $("#total_checkout").number(totalCheckout);
-
     });
 
 </script>
