@@ -24,7 +24,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <h4 class="header-title">Data Kategori</h4>
+                            <h4 class="header-title">Data Stok Barang</h4>
                         </div>
                         <div class="col-md-6 col-12">
                        
@@ -38,8 +38,10 @@
                         <thead class="bg-light text-capitalize">
                             <tr>
                                 <th>#</th>
-                                <th>Nama</th>
-                                <th>Keterangan</th>
+                                <th>Barang</th>
+                                <th>Size</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -55,7 +57,7 @@
 </div>
 </div>
 <!-- main content area end -->
-@include('kategori.modal')
+@include('stok.modal')
 @endsection
 
 @section('js')
@@ -83,13 +85,15 @@
             processing: true,
             serverSide: true,
             ajax: {
-                    url: "{{ route('kategori.index') }}",
+                    url: "{{ route('stok.index') }}",
                     type: "GET",
               },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'nama', name: 'nama'},
-                {data: 'keterangan', name: 'keterangan'},
+                {data: 'barang.nama', name: 'barang.nama'},
+                {data: 'size', name: 'size'},
+                {data: 'harga', name: 'harga'},
+                {data: 'stok', name: 'stok'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
               ]
             });
@@ -99,25 +103,12 @@
             table.ajax.reload(null,false);
         }   
 
-        function sukses() {
-            const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000
-                });
-            Toast.fire({
-                icon: 'success',
-                title: 'Berhasil !'
-            })
-        }
-
     function save(){
 
         if(tipe == "add"){
-            endpoint = "{{ route('kategori.store') }}";
+            endpoint = "{{ route('stok.store') }}";
         }if(tipe == "update"){
-            endpoint = "{{ route('/kategori/update') }}";
+            endpoint = "{{ route('/stok/update') }}";
         }
         
         $.ajax({
@@ -132,8 +123,8 @@
                     reload_table();
                     sukses();
                 }else{
-                    if(data.errors.nama){
-                        $('#nama').text(data.errors.nama[0]);
+                    if(data.errors.size){
+                        $('#size').text(data.errors.size[0]);
                     }
                 }
             },
@@ -143,29 +134,44 @@
       });
     }
 
+    function sukses() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+                });
+            Toast.fire({
+                icon: 'success',
+                title: 'Berhasil !'
+            })
+        }
+
     function add(){
       tipe = "add";
       $('#form')[0].reset(); // reset form on modals
-      $('#nama').html("");
+      $('#id_barang').html("");
       $('#modal-form').modal('show'); // show bootstrap modal
-      $('.modal-title').text('Input Data Kategori'); // Set Title to Bootstrap modal title
+      $('.modal-title').text('Input Data Stok'); // Set Title to Bootstrap modal title
     }
 
     function edit(id){
         tipe = "update";
         $('#form')[0].reset(); // reset form on modals
-        $('#nama').html("");
+        $('#size').html("");
         //Ajax Load data from ajax
         $.ajax({
-        url : "kategori/" + id,
+        url : "stok/" + id,
         type: "GET",
         dataType: "JSON",
         success: function(data) {
             $('[name="id"]').val(data.id);
-            $('[name="nama"]').val(data.nama);
-            $('[name="keterangan"]').val(data.keterangan);
+            $('[name="id_barang"]').val(data.id_barang);
+            $('[name="size"]').val(data.size);
+            $('[name="harga"]').val(data.harga);
+            $('[name="stok"]').val(data.stok);
             $('#modal-form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit Data Kategori'); // Set title to Bootstrap modal title   
+            $('.modal-title').text('Edit Data Stok'); // Set title to Bootstrap modal title   
         },
         error: function (jqXHR, textStatus , errorThrown) {
             alert(errorThrown);
@@ -191,7 +197,7 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url : "kategori/" + id,
+            url : "stok/" + id,
             type: "DELETE",
             dataType: "JSON",
             success: function(data){

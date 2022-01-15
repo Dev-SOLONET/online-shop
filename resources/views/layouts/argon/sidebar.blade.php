@@ -19,7 +19,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="icons.html">
+              <a class="nav-link" href="{{ route('stok.index') }}">
                 <i class="ni ni-planet text-orange"></i>
                 <span class="nav-link-text">Stok Barang</span>
               </a>
