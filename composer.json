@@ -14,7 +14,12 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.5",
+<<<<<<< Updated upstream
         "yajra/laravel-datatables-oracle": "~9.0"
+=======
+        "midtrans/midtrans-php": "^2.5",
+        "yajra/laravel-datatables-oracle": "^9.18"
+>>>>>>> Stashed changes
     },
     "require-dev": {
         "facade/ignition": "^2.5",
