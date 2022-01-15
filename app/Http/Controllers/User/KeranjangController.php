@@ -25,7 +25,7 @@ class KeranjangController extends Controller
         //datatable
         if (request()->ajax()) {
 
-            $query =  Keranjang::with('detail_barang.barang')->where('id_user', '1')->get();
+            $query =  Keranjang::with('detail_barang.barang')->where('id_user', Auth::user()->id)->get();
 
             return Datatables::of($query)
                 ->addIndexColumn()
@@ -104,17 +104,17 @@ class KeranjangController extends Controller
 
         $id_detail_barang   = Detail_barang::where('id_barang', $request->id_barang)->where('size', $request->size)->first();
 
-        $cek                = Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->first();
+        $cek                = Keranjang::where('id_user', Auth::user()->id)->where('id_detail_barang', $id_detail_barang->id)->first();
 
         if ($cek) {
 
-            Keranjang::where('id_user', '1')->where('id_detail_barang', $id_detail_barang->id)->update([
+            Keranjang::where('id_user', Auth::user()->id)->where('id_detail_barang', $id_detail_barang->id)->update([
                 'qty'           => $request->qty + $cek->qty,
             ]);
         } else {
 
             Keranjang::create([
-                'id_user'               => '1',
+                'id_user'               => Auth::user()->id,
                 'id_detail_barang'      => $id_detail_barang->id,
                 'qty'                   => $request->qty,
             ]);
@@ -132,7 +132,7 @@ class KeranjangController extends Controller
      */
     public function show($id)
     {
-        $data   = Keranjang::with('detail_barang.barang')->where('id_user', '1')->get();
+        $data   = Keranjang::with('detail_barang.barang')->where('id_user', Auth::user()->id)->get();
 
         return Response()->json($data);
     }
@@ -145,7 +145,6 @@ class KeranjangController extends Controller
      */
     public function edit(Request $request, $id)
     {
-
         Keranjang::find($id)->update([
             'qty'           => $request->get('qty'),
         ]);
