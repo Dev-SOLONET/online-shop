@@ -13,25 +13,25 @@
           <!-- Nav items -->
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="dashboard.html">
+              <a class="nav-link" href="#">
                 <i class="ni ni-tv-2 text-primary"></i>
                 <span class="nav-link-text">Penjualan</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('stok.index') }}">
+              <a class="nav-link" href="{{ route('admin.stok.index') }}">
                 <i class="ni ni-planet text-orange"></i>
                 <span class="nav-link-text">Stok Barang</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="icons.html">
+              <a class="nav-link" href="{{ route('admin.barang.index')}}">
                 <i class="ni ni-planet text-orange"></i>
                 <span class="nav-link-text">Barang</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('kategori.index') }}">
+              <a class="nav-link" href="{{ route('admin.kategori.index') }}">
                 <i class="ni ni-pin-3 text-primary"></i>
                 <span class="nav-link-text">Kategori</span>
               </a>

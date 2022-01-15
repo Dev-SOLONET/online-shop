@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modal-form">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Modal title</h5>
@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <input type="hidden" name="id">
                     <div class="form-row">
-                        <div class="col-md-6 col-12 mb-3">
+                        <div class="col-md-12 col-12 mb-3">
                             <label>Nama Barang</label>
                             <select name="id_barang" class="form-control selectpicker"
                                 data-live-search="true">
@@ -24,7 +24,7 @@
                                 <strong id="id_barang"></strong>
                             </span>
                         </div>
-                        <div class="col-md-12 col-12 mb-3">
+                        <div class="col-md-6 col-12 mb-3">
                             <label>Size</label>
                             <input type="text" class="form-control" name="size" placeholder="Masukan Size"
                                 required>
@@ -32,6 +32,16 @@
                                 <strong id="size"></strong>
                             </span>
                         </div>
+                        
+                        <div class="col-md-6 col-12 mb-3">
+                            <label>Stok</label>
+                            <input type="number" class="form-control" name="stok" placeholder="Masukan Stok"
+                                required>
+                            <span class="text-danger">
+                                <strong id="stok"></strong>
+                            </span>
+                        </div>
+
                         <div class="col-md-12 col-12 mb-3">
                             <label>Harga</label>
                             <input type="number" class="form-control" name="harga" placeholder="Masukan Harga"
@@ -40,14 +50,7 @@
                                 <strong id="harga"></strong>
                             </span>
                         </div>
-                        <div class="col-md-12 col-12 mb-3">
-                            <label>Stok</label>
-                            <input type="number" class="form-control" name="stok" placeholder="Masukan Stok"
-                                required>
-                            <span class="text-danger">
-                                <strong id="stok"></strong>
-                            </span>
-                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">

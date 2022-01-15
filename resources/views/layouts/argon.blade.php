@@ -7,7 +7,7 @@
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="Creative Tim">
-    <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+    <title>Admin Dashboard</title>
     <!-- Favicon -->
     <link rel="icon" href="{{ url('argon/assets/img/brand/favicon.png') }}" type="image/png">
     <!-- Fonts -->

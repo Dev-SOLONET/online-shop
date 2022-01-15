@@ -14,9 +14,13 @@
 @endsection
 
 @section('content')
-<!-- page title area end -->
-<div class="content">
-<div class="main-content-inner">
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        
+    </div>
+</div>
+<div class="container-fluid mt--6">
     <div class="row">
         <!-- data table start -->
         <div class="col-12 mt-5">
@@ -24,29 +28,29 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <h4 class="header-title">Data Stok Barang</h4>
+                            <h4 class="header-title">Data Kategori</h4>
                         </div>
                         <div class="col-md-6 col-12">
-                       
-                        <button type="button" onclick="add()" class="btn btn-rounded btn-outline-info float-right mb-3"><i
-                            class="ti-plus"> </i> Tambah</button>
-                        <button type="button" onclick="reload_table()" class="btn btn-rounded btn-outline-secondary float-right mb-3 mr-1"><i
-                                class="ti-reload"> </i> Reload</button>
+
+                            <button type="button" onclick="add()"
+                                class="btn btn-rounded btn-outline-primary float-right mb-3"><i class="ti-plus"> </i>
+                                Tambah</button>
+                            <button type="button" onclick="reload_table()"
+                                class="btn btn-rounded btn-outline-info float-right mb-3 mr-1"><i
+                                    class="ti-reload"> </i> Reload</button>
                         </div>
                     </div>
                     <table id="dataTable" class="text-center" width="100%">
-                        <thead class="bg-light text-capitalize">
+                        <thead class="text-capitalize">
                             <tr>
                                 <th>#</th>
-                                <th>Barang</th>
-                                <th>Size</th>
-                                <th>Harga</th>
-                                <th>Stok</th>
+                                <th>Nama</th>
+                                <th>Keterangan</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -55,9 +59,8 @@
         <!-- data table end -->
     </div>
 </div>
-</div>
 <!-- main content area end -->
-@include('stok.modal')
+@include('admin.kategori.modal')
 @endsection
 
 @section('js')
@@ -85,15 +88,13 @@
             processing: true,
             serverSide: true,
             ajax: {
-                    url: "{{ route('stok.index') }}",
+                    url: "{{ route('admin.kategori.index') }}",
                     type: "GET",
               },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'barang.nama', name: 'barang.nama'},
-                {data: 'size', name: 'size'},
-                {data: 'harga', name: 'harga'},
-                {data: 'stok', name: 'stok'},
+                {data: 'nama', name: 'nama'},
+                {data: 'keterangan', name: 'keterangan'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
               ]
             });
@@ -103,38 +104,7 @@
             table.ajax.reload(null,false);
         }   
 
-    function save(){
-
-        if(tipe == "add"){
-            endpoint = "{{ route('stok.store') }}";
-        }if(tipe == "update"){
-            endpoint = "{{ route('/stok/update') }}";
-        }
-        
-        $.ajax({
-            url : endpoint,
-            type: "POST",
-            data: $('#form').serialize(),
-            dataType: "JSON",
-            success: function(data){
-                if(data.status) {
-                    console.log(data.status);
-                    $('#modal-form').modal('hide');
-                    reload_table();
-                    sukses();
-                }else{
-                    if(data.errors.size){
-                        $('#size').text(data.errors.size[0]);
-                    }
-                }
-            },
-            error: function (jqXHR, textStatus , errorThrown){ 
-                alert(errorThrown);
-            }
-      });
-    }
-
-    function sukses() {
+        function sukses() {
             const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -147,31 +117,51 @@
             })
         }
 
+    function save(){
+        $.ajax({
+            url : "{{ route('admin.kategori.store') }}",
+            type: "POST",
+            data: $('#form').serialize(),
+            dataType: "JSON",
+            success: function(data){
+                if(data.status) {
+                    console.log(data.status);
+                    $('#modal-form').modal('hide');
+                    reload_table();
+                    sukses();
+                }else{
+                    if(data.errors.nama){
+                        $('#nama').text(data.errors.nama[0]);
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus , errorThrown){ 
+                alert(errorThrown);
+            }
+      });
+    }
+
     function add(){
-      tipe = "add";
       $('#form')[0].reset(); // reset form on modals
-      $('#id_barang').html("");
+      $('#nama').html("");
       $('#modal-form').modal('show'); // show bootstrap modal
-      $('.modal-title').text('Input Data Stok'); // Set Title to Bootstrap modal title
+      $('.modal-title').text('Input Data Kategori'); // Set Title to Bootstrap modal title
     }
 
     function edit(id){
-        tipe = "update";
         $('#form')[0].reset(); // reset form on modals
-        $('#size').html("");
+        $('#nama').html("");
         //Ajax Load data from ajax
         $.ajax({
-        url : "stok/" + id,
+        url : "/admin/kategori/" + id,
         type: "GET",
         dataType: "JSON",
         success: function(data) {
             $('[name="id"]').val(data.id);
-            $('[name="id_barang"]').val(data.id_barang);
-            $('[name="size"]').val(data.size);
-            $('[name="harga"]').val(data.harga);
-            $('[name="stok"]').val(data.stok);
+            $('[name="nama"]').val(data.nama);
+            $('[name="keterangan"]').val(data.keterangan);
             $('#modal-form').modal('show'); // show bootstrap modal when complete loaded
-            $('.modal-title').text('Edit Data Stok'); // Set title to Bootstrap modal title   
+            $('.modal-title').text('Edit Data Kategori'); // Set title to Bootstrap modal title   
         },
         error: function (jqXHR, textStatus , errorThrown) {
             alert(errorThrown);
@@ -197,7 +187,7 @@
       }).then((result) => {
         if (result.value) {
           $.ajax({
-            url : "stok/" + id,
+            url : "/admin/kategori/" + id,
             type: "DELETE",
             dataType: "JSON",
             success: function(data){

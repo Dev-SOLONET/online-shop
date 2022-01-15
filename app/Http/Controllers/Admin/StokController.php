@@ -20,6 +20,11 @@ class StokController
             $data = Detail_barang::with('barang')->select('id','id_barang','size','harga','stok')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('price', function ($row) {
+                    $actionBtn = number_format($row->harga);
+
+                return $actionBtn;
+            })
                 ->addColumn('action', function ($row) {
                         $actionBtn = '
                             <center>
@@ -34,7 +39,7 @@ class StokController
         }
         $barang       = Barang::select('id', 'nama')->get();
 
-        return view('stok.index',[
+        return view('admin.stok.index',[
             'title'     => 'Stok',
             'barang'  => $barang,
         ]);
@@ -91,27 +96,6 @@ class StokController
     {
         $data = Detail_barang::find($id);
         return response()->json($data);
-    }
-
-    public function updateStok(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id'        => 'required',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()]);
-        }
-
-        Detail_barang::find($request->id)->update([
-                    'id_barang'          => $request->id_barang,
-                    'size'               => $request->size,
-                    'harga'              => $request->harga,
-                    'stok'               => $request->stok,
-                ]);    
-        
-        return response()->json(['status'=> true]);
     }
 
     /**

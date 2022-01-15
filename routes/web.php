@@ -23,13 +23,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::resource('kategori', KategoriController::class);
-Route::post('/kategori/update', [KategoriController::class, 'updateKategori'])->name('/kategori/update');
-
-Route::resource('stok', StokController::class);
-Route::post('/stok/update', [StokController::class, 'updateStok'])->name('/stok/update');
-
-
 // redirect if auth
 Route::get('/', function () {
 
@@ -67,7 +60,6 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('get-city', [CheckoutController::class, 'get_city'])->name('get-city');
     //get cost raja ongkir
     Route::get('get-cost', [CheckoutController::class, 'get_cost'])->name('get-cost');
-
 });
 
 // jetstream
