@@ -14,9 +14,13 @@
 @endsection
 
 @section('content')
-<!-- page title area end -->
-<div class="content">
-<div class="main-content-inner">
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+
+    </div>
+</div>
+<div class="container-fluid mt--6">
     <div class="row">
         <!-- data table start -->
         <div class="col-12 mt-5">
@@ -24,22 +28,23 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 col-12">
-                            <h4 class="header-title">Data Barang</h4>
+                            <h4 class="header-title">Data Kategori</h4>
                         </div>
                         <div class="col-md-6 col-12">
-                       
-                        <button type="button" onclick="add()" class="btn btn-rounded btn-outline-info float-right mb-3"><i
-                            class="ti-plus"> </i> Tambah</button>
-                        <button type="button" onclick="reload_table()" class="btn btn-rounded btn-outline-secondary float-right mb-3 mr-1"><i
-                                class="ti-reload"> </i> Reload</button>
+
+                            <button type="button" onclick="add()"
+                                class="btn btn-rounded btn-outline-primary float-right mb-3"><i class="ti-plus"> </i>
+                                Tambah</button>
+                            <button type="button" onclick="reload_table()"
+                                class="btn btn-rounded btn-outline-info float-right mb-3 mr-1"><i class="ti-reload">
+                                </i> Reload</button>
                         </div>
                     </div>
                     <table id="dataTable" class="text-center" width="100%">
-                        <thead class="bg-light text-capitalize">
+                        <thead class="text-capitalize">
                             <tr>
                                 <th>#</th>
                                 <th>Nama</th>
-                                <th>Slug</th>
                                 <th>Kategori</th>
                                 <th>Foto Cover</th>
                                 <th>Foto Hover</th>
@@ -48,7 +53,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                 </div>
@@ -59,7 +64,7 @@
 </div>
 </div>
 <!-- main content area end -->
-@include('barang.modal')
+@include('admin.barang.modal')
 @endsection
 
 @section('js')
@@ -87,13 +92,12 @@
             processing: true,
             serverSide: true,
             ajax: {
-                    url: "{{ route('barang.index') }}",
+                    url: "{{ route('admin.barang.index') }}",
                     type: "GET",
               },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'nama', name: 'nama'},
-                {data: 'slug', name: 'slug'},
                 {data: 'kategori.nama', name: 'kategori.nama'},
                 {data: 'images', name: 'images'},
                 {data: 'images_hover', name: 'images_hover'},
@@ -108,35 +112,20 @@
         }   
 
     function save(){
-       $('#foto_cover').text('');
-       var formData = new FormData($('#form')[0]);
-
-        // if(tipe == "add"){
-        //     endpoint = "{{ route('barang.store') }}";
-        // }if(tipe == "update"){
-        //     endpoint = "{{ route('/barang/update') }}";
-        // }
-        
-        $.ajax({
-            url : "{{ route('barang.store') }}",
-            type: "POST",
-            data: formData,
-            dataType: "JSON",
-            success: function(data){
-                if(data.status) {
-                    console.log(data.status);
-                    $('#modal-form').modal('hide');
-                    reload_table();
-                    sukses();
-                }else{
-                    if(data.errors.nama){
-                        $('#nama').text(data.errors.nama[0]);
-                    }
-                }
-            },
-            error: function (jqXHR, textStatus , errorThrown){ 
+        var formData = new FormData($('#form')[0]);
+      $.ajax({
+        url : "{{ route('admin.barang.store') }}",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function(data){
+            console.log(data);
+        },
+        error: function (jqXHR, textStatus , errorThrown){ 
                 alert(errorThrown);
-            }
+        }
       });
     }
 
@@ -149,7 +138,6 @@
     }
 
     function edit(id){
-        tipe = "update";
         $('#form')[0].reset(); // reset form on modals
         $('#nama').html("");
         //Ajax Load data from ajax

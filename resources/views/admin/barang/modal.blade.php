@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="modal-form">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Modal title</h5>
@@ -20,11 +20,6 @@
                             </span>
                         </div>
                         <div class="col-md-12 col-12 mb-3">
-                            <label>Slug</label>
-                            <textarea class="form-control" name="slug"
-                                placeholder="Masukan Slug"></textarea>
-                        </div>
-                        <div class="col-md-6 col-12 mb-3">
                             <label>Kategori</label>
                             <select name="id_kategori" class="form-control selectpicker"
                                 data-live-search="true">
@@ -46,7 +41,7 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label>Foto Hover</label>
-                            <input type="file" class="form-control-file" name="foto_hover" >
+                            <input type="file" class="form-control" name="foto_hover" >
                                 <span class="text-danger">
                                     <strong id="foto_hover"></strong>
                                 </span>

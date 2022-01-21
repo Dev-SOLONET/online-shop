@@ -5,19 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Barang;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 use App\Models\Detail_barang;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class BarangController 
+class BarangController
 {
     public function index()
     {
         //datatable
         if (request()->ajax()) {
-            $data = Barang::with('kategori')->select('id','nama','slug','id_kategori','foto_hover','foto_cover','deskripsi')->get();
+            $data = Barang::with('kategori')->select('id', 'nama', 'slug', 'id_kategori', 'foto_hover', 'foto_cover', 'deskripsi')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('images', function ($data) {
@@ -27,7 +27,7 @@ class BarangController
                     return '<img onclick="img_data(' . $data->id . ')" src="' . url("/imageshover/$data->foto_hover") . '" style="width:80px;">';
                 })
                 ->addColumn('action', function ($row) {
-                        $actionBtn = '
+                    $actionBtn = '
                             <center>
                             <a href="javascript:void(0)" class="btn btn-sm btn-outline-warning" data-toggle="tooltip" data-placement="top" title="Edit" onclick="edit(' . $row->id . ')"><i class="fas fa-pencil-alt"></i></a>
                             <a href="javascript:void(0)" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="delete_data(' . $row->id . ')"><i class="fas fa-trash"></i></a>
@@ -35,13 +35,13 @@ class BarangController
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action','images','images_hover'])
+                ->rawColumns(['action', 'images', 'images_hover'])
                 ->make(true);
         }
 
         $kategori       = Kategori::select('id', 'nama')->get();
 
-        return view('barang.index',[
+        return view('admin.barang.index', [
             'title'     => 'Barang',
             'kategori'  => $kategori,
         ]);
@@ -67,40 +67,45 @@ class BarangController
     {
         $validator = Validator::make($request->all(), [
             'nama'               => 'required',
-            'slug'               => 'required',
             'id_kategori'        => 'required',
             'foto_cover'         => 'required',
         ]);
 
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
         }
 
-        $file = $request->file('foto_cover');
-            $file_name = time()."_".$file->getClientOriginalName();
+        if($request->id){
+
+        }else{
+
+            $file = $request->file('foto_cover');
+            $file_name = time() . "_" . $file->getClientOriginalName();
             $dir = 'images';
-            $file->move($dir,$file_name);
-
-        $filehover = $request->file('foto_hover');
-                $file_hover = time() . "_" . $file->getClientOriginalName();
-                    $dir = 'imageshover';
-                    $filehover->move($dir, $file_hover);
-
-        Barang::updateOrCreate(['id' => $request->id],
-                [
+            $file->move($dir, $file_name);
+    
+            $filehover = $request->file('foto_hover');
+            $file_hover = time() . "_hv_" . $file->getClientOriginalName();
+            $dir = 'images';
+            $filehover->move($dir, $file_hover);
+    
+            Barang::Create([
                     'nama'                => $request->nama,
-                    'slug'                => $request->slug,
+                    'slug'                => Str::slug($request->slug, '-'),
                     'id_kategori'         => $request->id_kategori,
                     'foto_cover'          => $file_name,
                     'foto_hover'          => $file_hover,
                     'deskripsi'           => $request->deskripsi,
-                ]);   
-   
-        return response()->json(['status'=> true]);
+                ]
+            );
+
+        }
+
+
+        return response()->json(['status' => true]);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -112,30 +117,6 @@ class BarangController
         return response()->json($data);
     }
 
-    public function updateBarang(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required',
-            'nama' => 'required|min:2',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()]);
-        }
-
-        Barang::find($request->id)->update([
-                    'nama'                => $request->nama,
-                    'slug'                => $request->slug,
-                    'id_kategori'         => $request->id_kategori,
-                    'foto_cover'          => $request->foto_cover,
-                    'foto_hover'          => $request->foto_hover,
-                    'deskripsi'           => $request->deskripsi,
-                ]);    
-        
-        return response()->json(['status'=> true]);
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -144,12 +125,11 @@ class BarangController
      */
     public function destroy($id)
     {
-        $barang = Barang::where('id',$id)->first();
         $ceksatuan = Detail_barang::where('id_barang', $barang->id)->first();
 
-        if($ceksatuan){
-            return response()->json(['status'=> false]);
-        }else{
+        if ($ceksatuan) {
+            return response()->json(['status' => false]);
+        } else {
             Barang::find($id)->delete();
             return response()->json(['status' => true]);
         }

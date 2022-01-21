@@ -144,12 +144,14 @@
     function add(){
       $('#form')[0].reset(); // reset form on modals
       $('#nama').html("");
+      $('[name="id"]').val('');
       $('#modal-form').modal('show'); // show bootstrap modal
       $('.modal-title').text('Input Data Kategori'); // Set Title to Bootstrap modal title
     }
 
     function edit(id){
         $('#form')[0].reset(); // reset form on modals
+        $('[name="id"]').val('');
         $('#nama').html("");
         //Ajax Load data from ajax
         $.ajax({

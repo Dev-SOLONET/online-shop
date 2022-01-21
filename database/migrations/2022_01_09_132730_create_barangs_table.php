@@ -20,7 +20,7 @@ class CreateBarangsTable extends Migration
             $table->integer('id_kategori');
             $table->text('foto_cover')->nullable();
             $table->text('foto_hover')->nullable();
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }
