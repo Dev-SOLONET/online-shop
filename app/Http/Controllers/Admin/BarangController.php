@@ -23,6 +23,9 @@ class BarangController
                 ->addColumn('images', function ($data) {
                     return '<img onclick="img_data(' . $data->id . ')" src="' . url("/images/$data->foto_cover") . '" style="width:80px;">';
                 })
+                ->addColumn('images_hover', function ($data) {
+                    return '<img onclick="img_data(' . $data->id . ')" src="' . url("/imageshover/$data->foto_hover") . '" style="width:80px;">';
+                })
                 ->addColumn('action', function ($row) {
                         $actionBtn = '
                             <center>
@@ -32,7 +35,7 @@ class BarangController
 
                     return $actionBtn;
                 })
-                ->rawColumns(['action','images'])
+                ->rawColumns(['action','images','images_hover'])
                 ->make(true);
         }
 
@@ -66,6 +69,7 @@ class BarangController
             'nama'               => 'required',
             'slug'               => 'required',
             'id_kategori'        => 'required',
+            'foto_cover'         => 'required',
         ]);
 
         if ($validator->fails())
@@ -74,13 +78,18 @@ class BarangController
         }
 
         $file = $request->file('foto_cover');
-                $file_name = time() . "_" . $file->getClientOriginalName();
-                $dir = 'images';
-                $file->move($dir, $file_name);
+            $file_name = time()."_".$file->getClientOriginalName();
+            $dir = 'images';
+            $file->move($dir,$file_name);
+
+        // $file = $request->file('foto_cover');
+        //         $file_name = time() . "_" . $file->getClientOriginalName();
+        //         $dir = 'images';
+        //         $file->move($dir, $file_name);
 
         // $filehover = $request->file('foto_hover');
         //         $file_hover = time() . "_" . $file->getClientOriginalName();
-        //             $dir = 'images';
+        //             $dir = 'imageshover';
         //             $filehover->move($dir, $file_hover);
 
         Barang::updateOrCreate(['id' => $request->id],

@@ -96,7 +96,7 @@
                 {data: 'slug', name: 'slug'},
                 {data: 'kategori.nama', name: 'kategori.nama'},
                 {data: 'images', name: 'images'},
-                {data: 'foto_hover', name: 'foto_hover'},
+                {data: 'images_hover', name: 'images_hover'},
                 {data: 'deskripsi', name: 'deskripsi'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
               ]
@@ -108,7 +108,7 @@
         }   
 
     function save(){
-
+    // var formData = new FormData($('#form')[0]);
         if(tipe == "add"){
             endpoint = "{{ route('barang.store') }}";
         }if(tipe == "update"){

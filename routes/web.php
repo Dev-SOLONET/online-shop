@@ -49,7 +49,7 @@ Route::get('/', function () {
 
 //role admin
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
-    // Route::resource('barang', BarangController::class);
+    Route::resource('barang', BarangController::class);
     Route::resource('stok', StokController::class);
     Route::resource('kategori', KategoriController::class);
 });

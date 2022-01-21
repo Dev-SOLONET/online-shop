@@ -6,7 +6,7 @@
                 <h5 class="modal-title">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
             </div>
-            <form  id="form" >
+            <form id="form">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id">
@@ -39,18 +39,18 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label>Foto Cover</label>
-                            <input type="file" class="form-control" name="foto_cover" enctype="multipart/form-data">
+                            <input type="file" class="form-control" name="foto_cover" >
                                 <span class="text-danger">
                                     <strong id="foto_cover"></strong>
                                 </span>
                         </div>
-                        <div class="col-md-12 mb-3">
+                        {{-- <div class="col-md-12 mb-3">
                             <label>Foto Hover</label>
-                            <input type="file" class="form-control" name="foto_hover" enctype="multipart/form-data">
+                            <input type="file" class="form-control-file" name="foto_hover" >
                                 <span class="text-danger">
                                     <strong id="foto_hover"></strong>
                                 </span>
-                        </div>
+                        </div> --}}
                         <div class="col-md-12 mb-3">
                             <label>Deskripsi</label>
                             <textarea class="form-control" name="deskripsi" placeholder="Masukan Deskripsi"></textarea>
