@@ -82,15 +82,10 @@ class BarangController
             $dir = 'images';
             $file->move($dir,$file_name);
 
-        // $file = $request->file('foto_cover');
-        //         $file_name = time() . "_" . $file->getClientOriginalName();
-        //         $dir = 'images';
-        //         $file->move($dir, $file_name);
-
-        // $filehover = $request->file('foto_hover');
-        //         $file_hover = time() . "_" . $file->getClientOriginalName();
-        //             $dir = 'imageshover';
-        //             $filehover->move($dir, $file_hover);
+        $filehover = $request->file('foto_hover');
+                $file_hover = time() . "_" . $file->getClientOriginalName();
+                    $dir = 'imageshover';
+                    $filehover->move($dir, $file_hover);
 
         Barang::updateOrCreate(['id' => $request->id],
                 [
@@ -98,7 +93,7 @@ class BarangController
                     'slug'                => $request->slug,
                     'id_kategori'         => $request->id_kategori,
                     'foto_cover'          => $file_name,
-                    'foto_hover'          => $request->nama,
+                    'foto_hover'          => $file_hover,
                     'deskripsi'           => $request->deskripsi,
                 ]);   
    

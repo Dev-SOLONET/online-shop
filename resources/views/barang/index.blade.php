@@ -108,17 +108,19 @@
         }   
 
     function save(){
-    // var formData = new FormData($('#form')[0]);
-        if(tipe == "add"){
-            endpoint = "{{ route('barang.store') }}";
-        }if(tipe == "update"){
-            endpoint = "{{ route('/barang/update') }}";
-        }
+       $('#foto_cover').text('');
+       var formData = new FormData($('#form')[0]);
+
+        // if(tipe == "add"){
+        //     endpoint = "{{ route('barang.store') }}";
+        // }if(tipe == "update"){
+        //     endpoint = "{{ route('/barang/update') }}";
+        // }
         
         $.ajax({
-            url : endpoint,
+            url : "{{ route('barang.store') }}",
             type: "POST",
-            data: $('#form').serialize(),
+            data: formData,
             dataType: "JSON",
             success: function(data){
                 if(data.status) {
