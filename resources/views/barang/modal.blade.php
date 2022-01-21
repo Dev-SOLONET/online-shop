@@ -44,13 +44,13 @@
                                     <strong id="foto_cover"></strong>
                                 </span>
                         </div>
-                        {{-- <div class="col-md-12 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label>Foto Hover</label>
                             <input type="file" class="form-control-file" name="foto_hover" >
                                 <span class="text-danger">
                                     <strong id="foto_hover"></strong>
                                 </span>
-                        </div> --}}
+                        </div>
                         <div class="col-md-12 mb-3">
                             <label>Deskripsi</label>
                             <textarea class="form-control" name="deskripsi" placeholder="Masukan Deskripsi"></textarea>
