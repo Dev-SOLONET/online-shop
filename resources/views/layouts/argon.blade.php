@@ -7,7 +7,7 @@
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="Creative Tim">
-    <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+    <title>Admin Dashboard</title>
     <!-- Favicon -->
     <link rel="icon" href="{{ url('argon/assets/img/brand/favicon.png') }}" type="image/png">
     <!-- Fonts -->
@@ -46,8 +46,22 @@
                         </button>
                     </form>
                     <!-- Navbar links -->
-                    <ul class="navbar-nav align-items-center  ml-md-auto ">
-                        
+                    <ul class="navbar-nav align-items-center  ml-md-auto">
+                        <li class="nav-item d-xl-none">
+                            <!-- Sidenav toggler -->
+                            <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main">
+                              <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                              </div>
+                            </div>
+                          </li>
+                        <li class="nav-item d-sm-none">
+                            <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
+                              <i class="ni ni-zoom-split-in"></i>
+                            </a>
+                        </li>
                     </ul>
                     <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
                         <li class="nav-item dropdown">

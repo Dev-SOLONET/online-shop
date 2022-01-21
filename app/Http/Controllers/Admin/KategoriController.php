@@ -31,7 +31,7 @@ class KategoriController
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('kategori.index',[
+        return view('admin.kategori.index',[
             'title'     => 'Kategori'
         ]);
     }
@@ -84,26 +84,6 @@ class KategoriController
         return response()->json($data);
     }
 
-    public function updateKategori(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required',
-            'nama' => 'required|min:2',
-        ]);
-
-        if ($validator->fails())
-        {
-            return response()->json(['errors'=>$validator->errors()]);
-        }
-
-        Kategori::find($request->id)->update([
-                    'nama'         => $request->nama,
-                    'keterangan'   => $request->keterangan,
-                ]);    
-        
-        return response()->json(['status'=> true]);
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -114,7 +94,7 @@ class KategoriController
     {
         $ceksatuan = Barang::where('id_kategori',$id)->get();
 
-        if($ceksatuan = $id){
+        if(count($ceksatuan) > 0){
             return response()->json(['status'=> false]);
         }else{
             Kategori::find($id)->delete();

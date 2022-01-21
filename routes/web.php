@@ -23,13 +23,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::resource('kategori', KategoriController::class);
-Route::post('/kategori/update', [KategoriController::class, 'updateKategori'])->name('/kategori/update');
-Route::resource('barang', BarangController::class);
-Route::post('/barang/update', [BarangController::class, 'updateBarang'])->name('/barang/update');
-
-
-
 // redirect if auth
 Route::get('/', function () {
 
@@ -60,6 +53,13 @@ Route::resource('home', DashboardController::class);
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::resource('keranjang', KeranjangController::class);
     Route::resource('checkout', CheckoutController::class);
+
+    //get province raja ongkir
+    Route::get('get-province', [CheckoutController::class, 'get_province'])->name('get-province');
+    //get city raja ongkir
+    Route::get('get-city', [CheckoutController::class, 'get_city'])->name('get-city');
+    //get cost raja ongkir
+    Route::get('get-cost', [CheckoutController::class, 'get_cost'])->name('get-cost');
 });
 
 // jetstream

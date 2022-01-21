@@ -128,10 +128,18 @@
                                         </div>
                                     </div>
                                     <div class="product-buttons">
+                                        @if (Auth::user())
                                         <button type="button" onclick="add_cart()" id="cartEffect"
                                             class="btn btn-solid hover-solid btn-animation"><i
                                                 class="fa fa-shopping-cart" aria-hidden="true"></i> Masukan
-                                            Keranjang</button> </div>
+                                            Keranjang</button> 
+                                        @else
+                                        <a href="{{ route('login') }}" id="cartEffect"
+                                        class="btn btn-solid hover-solid btn-animation"><i
+                                            class="fa fa-shopping-cart" aria-hidden="true"></i> Masukan
+                                        Keranjang</a>             
+                                        @endif
+                                    </div>
                                     <div class="product-count">
                                         <ul>
                                             <li>

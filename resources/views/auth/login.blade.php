@@ -51,7 +51,7 @@
                 <h3>Pelanggan Baru</h3>
                 <div class="theme-card authentication-right">
                     <h6 class="title-font">Daftar Akun</h6>
-                    <p>Pendaftaran cepat dan mudah. Hal ini memungkinkan Anda untuk dapat memesan dari toko kami. Untuk mulai berbelanja klik daftar.</p><a href="{{ route('auth.register')}}"
+                    <p>Pendaftaran cepat dan mudah. Hal ini memungkinkan Anda untuk dapat memesan dari toko kami. Untuk mulai berbelanja klik daftar.</p><a href="{{ route('register')}}"
                         class="btn btn-solid">Daftar Akun Baru</a>
                 </div>
             </div>
