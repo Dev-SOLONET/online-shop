@@ -69,6 +69,7 @@ class BarangController
             'nama'               => 'required',
             'id_kategori'        => 'required',
             'foto_cover'         => 'required',
+            'foto_hover'         => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -76,6 +77,26 @@ class BarangController
         }
 
         if($request->id){
+
+            $file = $request->file('foto_cover');
+            $file_name = time() . "_" . $file->getClientOriginalName();
+            $dir = 'images';
+            $file->move($dir, $file_name);
+    
+            $filehover = $request->file('foto_hover');
+            $file_hover = time() . "_hv_" . $file->getClientOriginalName();
+            $dir = 'images';
+            $filehover->move($dir, $file_hover);
+
+            Barang::find($request->id)->update([
+                'nama'                => $request->nama,
+                'slug'                => Str::slug($request->slug, '-'),
+                'id_kategori'         => $request->id_kategori,
+                'foto_cover'          => $file_name,
+                'foto_hover'          => $file_hover,
+                'deskripsi'           => $request->deskripsi,
+            ]
+        );
 
         }else{
 
@@ -125,7 +146,7 @@ class BarangController
      */
     public function destroy($id)
     {
-        $ceksatuan = Detail_barang::where('id_barang', $barang->id)->first();
+        $ceksatuan = Detail_barang::where('id_barang', $id)->first();
 
         if ($ceksatuan) {
             return response()->json(['status' => false]);

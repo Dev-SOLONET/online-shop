@@ -112,6 +112,9 @@
         }   
 
     function save(){
+        $('#nama').html("");
+        $('#foto_cover').html("");
+        $('#foto_hover').html("");
         var formData = new FormData($('#form')[0]);
       $.ajax({
         url : "{{ route('admin.barang.store') }}",
@@ -121,7 +124,21 @@
         processData: false,
         dataType: "JSON",
         success: function(data){
-            console.log(data);
+            if(data.status) {
+                    $('#modal-form').modal('hide');
+                    reload_table();
+                    sukses();
+                }else{
+                    if(data.errors.nama){
+                        $('#nama').text(data.errors.nama[0]);
+                    }
+                    if(data.errors.foto_cover){
+                        $('#foto_cover').text(data.errors.foto_cover[0]);
+                    }
+                    if(data.errors.foto_hover){
+                        $('#foto_hover').text(data.errors.foto_hover[0]);
+                    }
+                }
         },
         error: function (jqXHR, textStatus , errorThrown){ 
                 alert(errorThrown);
@@ -133,6 +150,8 @@
       tipe = "add";
       $('#form')[0].reset(); // reset form on modals
       $('#nama').html("");
+      $('#foto_cover').html("");
+      $('#foto_hover').html("");
       $('#modal-form').modal('show'); // show bootstrap modal
       $('.modal-title').text('Input Data Barang'); // Set Title to Bootstrap modal title
     }
@@ -140,6 +159,8 @@
     function edit(id){
         $('#form')[0].reset(); // reset form on modals
         $('#nama').html("");
+        $('#foto_cover').html("");
+        $('#foto_hover').html("");
         //Ajax Load data from ajax
         $.ajax({
         url : "barang/" + id,
@@ -185,7 +206,6 @@
             dataType: "JSON",
             success: function(data){
                 if(data.status){
-                console.log(status);
                 reload_table();
                 sukseshapus();
                 }else{
