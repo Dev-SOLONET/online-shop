@@ -169,10 +169,7 @@
         success: function(data) {
             $('[name="id"]').val(data.id);
             $('[name="nama"]').val(data.nama);
-            $('[name="slug"]').val(data.slug);
             $('[name="id_kategori"]').val(data.id_kategori);
-            $('[name="foto_cover"]').val(data.foto_cover);
-            $('[name="foto_hover"]').val(data.foto_hover);
             $('[name="deskripsi"]').val(data.deskripsi);
             $('#modal-form').modal('show'); // show bootstrap modal when complete loaded
             $('.modal-title').text('Edit Data Barang'); // Set title to Bootstrap modal title   

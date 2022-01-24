@@ -53,11 +53,11 @@
                 <div class="product-box">
                     <div class="img-wrapper">
                         <div class="front">
-                            <a href="{{ route('home.show', $data->slug )}}"><img src="{{ url('multikart/assets/images/pro3/33.jpg') }}"
+                            <a href="{{ route('home.show', $data->slug )}}"><img src="{{ url('images/'.$data->foto_cover.'') }}"
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="back">
-                            <a href="{{ route('home.show', $data->slug )}}"><img src="{{ url('multikart/assets/images/pro3/34.jpg') }}"
+                            <a href="{{ route('home.show', $data->slug )}}"><img src="{{ url('images/'.$data->foto_hover.'') }}"
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="cart-info cart-wrap">

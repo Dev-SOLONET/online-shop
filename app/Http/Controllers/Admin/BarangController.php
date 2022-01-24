@@ -24,7 +24,7 @@ class BarangController
                     return '<img onclick="img_data(' . $data->id . ')" src="' . url("/images/$data->foto_cover") . '" style="width:80px;">';
                 })
                 ->addColumn('images_hover', function ($data) {
-                    return '<img onclick="img_data(' . $data->id . ')" src="' . url("/imageshover/$data->foto_hover") . '" style="width:80px;">';
+                    return '<img onclick="img_data(' . $data->id . ')" src="' . url("/images/$data->foto_hover") . '" style="width:80px;">';
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '
@@ -90,7 +90,7 @@ class BarangController
 
             Barang::find($request->id)->update([
                 'nama'                => $request->nama,
-                'slug'                => Str::slug($request->slug, '-'),
+                'slug'                => Str::slug($request->nama, '-'),
                 'id_kategori'         => $request->id_kategori,
                 'foto_cover'          => $file_name,
                 'foto_hover'          => $file_hover,
@@ -112,7 +112,7 @@ class BarangController
     
             Barang::Create([
                     'nama'                => $request->nama,
-                    'slug'                => Str::slug($request->slug, '-'),
+                    'slug'                => Str::slug($request->nama, '-'),
                     'id_kategori'         => $request->id_kategori,
                     'foto_cover'          => $file_name,
                     'foto_hover'          => $file_hover,

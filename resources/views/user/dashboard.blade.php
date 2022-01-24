@@ -99,12 +99,12 @@
                         <div class="img-wrapper">
                             <div class="front">
                                 <a href="{{ route('home.show', $items->slug )}}"><img
-                                        src="{{ url('multikart/assets/images/pro3/27.jpg') }}"
+                                        src="{{ url('images/'.$items->foto_cover.'') }}"
                                         class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="back">
                                 <a href="{{ route('home.show', $items->slug )}}"><img
-                                        src="{{ url('multikart/assets/images/pro3/35.jpg') }}"
+                                    src="{{ url('images/'.$items->foto_hover.'') }}"
                                         class="img-fluid blur-up lazyload bg-img" alt=""></a>
                             </div>
                             <div class="cart-info cart-wrap">
@@ -198,12 +198,12 @@
                                     <div class="img-wrapper">
                                         <div class="front">
                                             <a href="{{ route('home.show', $produk->slug )}}"><img
-                                                    src="{{ url('multikart/assets/images/pro3/27.jpg') }}"
+                                                src="{{ url('images/'.$items->foto_cover.'') }}"
                                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                                         </div>
                                         <div class="back">
                                             <a href="{{ route('home.show', $produk->slug )}}"><img
-                                                    src="{{ url('multikart/assets/images/pro3/34.jpg') }}"
+                                                src="{{ url('images/'.$items->foto_hover.'') }}"
                                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                                         </div>
                                         <div class="cart-info cart-wrap">

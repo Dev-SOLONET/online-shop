@@ -31,7 +31,7 @@
                                 <div class="media">
                                     <a href="{{ route('home.show', $terbaru->slug )}}"><img
                                             class="img-fluid blur-up lazyload"
-                                            src="{{ url('multikart/assets/images/fashion/pro/1.jpg') }} " alt=""></a>
+                                            src="{{ url('images/'.$terbaru->foto_cover.'') }}" alt=""></a>
                                     <div class="media-body align-self-center">
                                         <div class="rating"><i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
                                                 class="fa fa-star"></i> <i class="fa fa-star"></i> <i
@@ -57,14 +57,10 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="product-slick">
-                                    <div><img src="{{ url('multikart/assets/images/pro3/1.jpg') }} " alt=""
+                                    <div><img src="{{ url('images/'.$barang->foto_cover.'') }}" alt=""
                                             class="img-fluid blur-up lazyload image_zoom_cls-0"></div>
-                                    <div><img src="{{ url('multikart/assets/images/pro3/2.jpg') }} " alt=""
+                                    <div><img src="{{ url('images/'.$barang->foto_hover.'') }}" alt=""
                                             class="img-fluid blur-up lazyload image_zoom_cls-1"></div>
-                                    <div><img src="{{ url('multikart/assets/images/pro3/27.jpg') }} " alt=""
-                                            class="img-fluid blur-up lazyload image_zoom_cls-2"></div>
-                                    <div><img src="{{ url('multikart/assets/images/pro3/27.jpg') }} " alt=""
-                                            class="img-fluid blur-up lazyload image_zoom_cls-3"></div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12 p-0">
@@ -200,12 +196,12 @@
                     <div class="img-wrapper">
                         <div class="front">
                             <a href="{{ route('home.show', $result->slug )}}"><img
-                                    src="{{ url('multikart/assets/images/pro3/33.jpg') }} "
+                                src="{{ url('images/'.$barang->foto_hover.'') }}"
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="back">
                             <a href="{{ route('home.show', $result->slug )}}"><img
-                                    src="{{ url('multikart/assets/images/pro3/34.jpg') }} "
+                                src="{{ url('images/'.$barang->foto_cover.'') }}"
                                     class="img-fluid blur-up lazyload bg-img" alt=""></a>
                         </div>
                         <div class="cart-info cart-wrap">
