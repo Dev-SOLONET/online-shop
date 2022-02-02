@@ -97,7 +97,7 @@ class CheckoutController extends Controller
 
     public function get_province(){
 
-        $key = config('services.rajaongkir.key', '');
+        $key = config('rajaongkir.key', '');
 
         $response = Http::get('https://api.rajaongkir.com/starter/province', [
             'key'       => $key
@@ -110,7 +110,7 @@ class CheckoutController extends Controller
 
     public function get_city(Request $request){
 
-        $key = config('services.rajaongkir.key', '');
+        $key = config('rajaongkir.key', '');
 
         $response = Http::get('https://api.rajaongkir.com/starter/city', [
             'key'          => $key,
@@ -125,7 +125,7 @@ class CheckoutController extends Controller
 
     public function get_cost(Request $request){
 
-        $key = config('services.rajaongkir.key', '');
+        $key = config('rajaongkir.key', '');
 
         $response = Http::post('https://api.rajaongkir.com/starter/cost', [
             'key'           => $key,
