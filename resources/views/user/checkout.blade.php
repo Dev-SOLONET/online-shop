@@ -20,62 +20,62 @@
 <section class="section-b-space">
     <div class="container">
         <div class="checkout-page">
-            <div class="checkout-form">
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12 col-xs-12">
-                        <div class="checkout-title">
-                            <h3>Detail Pengiriman</h3>
-                        </div>
-                        <div class="row check-out">
-                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                <div class="field-label">Penerima</div>
-                                <input type="text" name="name" value="{{ $user->name }}"
-                                    placeholder="Masukan Nama Penerima">
+            <form method="POST" action="{{ route('payment.store')}}">
+                @csrf
+                <div class="checkout-form">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-xs-12">
+                            <div class="checkout-title">
+                                <h3>Detail Pengiriman</h3>
                             </div>
-                            <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                                <div class="field-label">Telp</div>
-                                <input type="number" name="telp" value="{{ $user->telp }}"
-                                    placeholder="Masukan No Telp">
-                            </div>
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <div class="field-label">Provinsi</div>
-                                <select name="prov" id="prov">
-                                    <option disabled selected>-- Pilih Provinsi --</option>
-                                    @foreach ($province as $prov)
-                                    <option value="{{ $prov['province_id'] }}">{{ $prov['province'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <div class="field-label">Kota</div>
-                                <select name="kota" id="kota">
+                            <div class="row check-out">
+                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="field-label">Penerima</div>
+                                    <input type="text" name="name" value="{{ $user->name }}"
+                                        placeholder="Masukan Nama Penerima">
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                    <div class="field-label">Telp</div>
+                                    <input type="number" name="telp" value="{{ $user->telp }}"
+                                        placeholder="Masukan No Telp">
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">Provinsi</div>
+                                    <select name="prov" id="prov">
+                                        <option disabled selected>-- Pilih Provinsi --</option>
+                                        @foreach ($province as $prov)
+                                        <option value="{{ $prov['province_id'] }}">{{ $prov['province'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">Kota</div>
+                                    <select name="kota" id="kota">
 
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4 col-sm-12 col-xs-12">
-                                <div class="field-label">Kurir</div>
-                                <select name="kurir" id="kurir">
-                                    <option disabled selected>-- Pilih Kurir --</option>
-                                    <option value="jne">JNE</option>
-                                    <option value="pos">POS</option>
-                                    <option value="tiki">TIKI</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-8 col-sm-12 col-xs-12">
-                                <div class="field-label">Service</div>
-                                <select name="service" id="service">
-                                    <option disabled selected>-- Pilih Service --</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-12 col-sm-12 col-xs-12">
-                                <div class="field-label">Detail Alamat</div>
-                                <textarea class="form-control" name="alamat" rows="3"></textarea>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4 col-sm-12 col-xs-12">
+                                    <div class="field-label">Kurir</div>
+                                    <select name="kurir" id="kurir">
+                                        <option disabled selected>-- Pilih Kurir --</option>
+                                        <option value="jne">JNE</option>
+                                        <option value="pos">POS</option>
+                                        <option value="tiki">TIKI</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-8 col-sm-12 col-xs-12">
+                                    <div class="field-label">Service</div>
+                                    <select name="service" id="service" onchange="get_cost()">
+                                        <option disabled selected>-- Pilih Service --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                    <div class="field-label">Detail Alamat</div>
+                                    <textarea class="form-control" name="alamat" rows="3"></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-xs-12">
-                        <form method="POST" action="{{ route('payment.store')}}">
-                            @csrf
+                        <div class="col-lg-6 col-sm-12 col-xs-12">
                             <div class="checkout-details">
                                 <div class="order-box">
                                     <div class="title-box">
@@ -109,11 +109,11 @@
                                     <button type="submit" class="btn btn-solid">Bayar</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
+        </form>
     </div>
 </section>
 <!-- section end -->
@@ -176,9 +176,13 @@
                 var html = '';
                 var i;
                 for (i = 0; i < data.length; i++) {
-                    html += '<option value=' + data[i].cost[0].value + '>' + data[i].service + ' | ' + data[i].description + ' | Rp.' +data[i].cost[0].value+ '</option>';
+                    html += '<option data-id="'+data[i].cost[0].value+'" value="' + data[i].service + '">' + data[i].service + ' | ' + data[i].description + ' | Rp.' +data[i].cost[0].value+ '</option>';
                 }
                 $('#service').html(html);
+
+                if(data.length == 1){
+                    get_cost();
+                }
 
             }
         });
@@ -186,16 +190,17 @@
         return false;
     });
 
-    $('#service').change(function() {
-        var cost        = $(this).val();
+    function get_cost() {
+        var cost        = $('#service option:selected').data('id');
         var subtotal    = $('#subtotal_keranjang').val();
 
         var totalCheckout = parseInt(cost) + parseInt(subtotal);
         
         $("#total_ongkir").number(cost);
         $("#total_checkout").number(totalCheckout);
+
         $('#ongkir').val(cost);
-    });
+    };
 
 </script>
 @endsection

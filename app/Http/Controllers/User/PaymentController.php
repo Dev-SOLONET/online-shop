@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Alamat_pengiriman;
+use App\Models\Detail_penjualan;
 use Illuminate\Http\Request;
 use App\Models\Keranjang;
+use App\Models\Penjualan;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use Midtrans\Config;
@@ -40,16 +44,60 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+
         //ambil data keranjang user
         $keranjang = Keranjang::with('detail_barang')
                         ->where('id_user', Auth::user()->id)
                         ->get();
+
         //hitung subtotal barang di keranjang 
         $subtotal = 0;
+
+        //buat kode penjualan
+        $kodePenjualan  = date('Y-m-d').'-'.rand();
         foreach($keranjang as $data){
             $subtotal += $data->qty * $data->detail_barang->harga;
+
+            // buat array untuk memasukan data keranjang ke detail penjualan
+            $array = [
+                'kode_penjualan'    => $kodePenjualan,
+                'id_detail_barang'  => $data->id_detail_barang,
+                'qty'               => $data->qty,
+                'harga'             => $data->detail_barang->harga
+            ];
+
+            $barang[] = $array;
         }
-        
+
+        //masukan data ke detail penjualan
+        Detail_penjualan::insert($barang);
+
+        //buat transaksi di penjualan
+        Penjualan::create([
+            'kode_penjualan'    => $kodePenjualan,
+            'tgl'               => date('Y-m-d'),
+            'id_user'           => Auth::user()->id,
+            'ongkir'            => $request->ongkir,
+            'total'             => $subtotal + $request->ongkir,
+            'status'            => '',
+        ]);
+
+        //simpan alamat pengiriman
+        Alamat_pengiriman::create([
+            'kode_penjualan'    => $kodePenjualan,
+            'origin'            => config('rajaongkir.origin', '445'),
+            'destination'       => $request->kota,
+            'courier'           => $request->kurir,
+            'weight'            => 1,
+            'service'           => $request->service,
+            'alamat'            => $request->alamat,
+        ]);
+
+        //hapus data keranjang
+        Keranjang::where('id_user', Auth::user()->id)->delete();
+
+        //ambil data user
+        $user   = User::find(Auth::user()->id);
 
         // config midtrans
         // Set your Merchant Server Key
@@ -67,7 +115,11 @@ class PaymentController extends Controller
                 'order_id'      => rand(),
                 'gross_amount'  => intval($subtotal + $request->ongkir),
             ],
-            'enabled_payments'  => ['gopay'],
+            'customer_details' => [
+                'first_name'   => $request->name,
+                'email'        => $user->email,
+                'phone'        => $request->telp,
+                ],
             'vtweb' => []
         );
         

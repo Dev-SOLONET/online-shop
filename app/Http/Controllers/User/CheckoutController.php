@@ -129,7 +129,7 @@ class CheckoutController extends Controller
 
         $response = Http::post('https://api.rajaongkir.com/starter/cost', [
             'key'           => $key,
-            'origin'        => '445',
+            'origin'        => config('rajaongkir.origin', '445'),
             'destination'   => $request->get('destination'),
             'weight'        => 1,
             'courier'       => $request->get('courier'),

@@ -14,6 +14,7 @@ class Penjualan extends Model
         'tgl',
         'id_user',
         'ongkir',
+        'status',
         'total'
     ];
 
