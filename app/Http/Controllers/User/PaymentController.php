@@ -112,7 +112,7 @@ class PaymentController extends Controller
         //buat parameter yg akan di kirimkan ke midtrans
         $params = array(
             'transaction_details' => [
-                'order_id'      => rand(),
+                'order_id'      => $kodePenjualan,
                 'gross_amount'  => intval($subtotal + $request->ongkir),
             ],
             'customer_details' => [
