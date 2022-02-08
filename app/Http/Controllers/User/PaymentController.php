@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Midtrans\Config;
 use Midtrans\Snap;
+use Midtrans\Notification;
 
 class PaymentController extends Controller
 {
@@ -47,15 +48,15 @@ class PaymentController extends Controller
 
         //ambil data keranjang user
         $keranjang = Keranjang::with('detail_barang')
-                        ->where('id_user', Auth::user()->id)
-                        ->get();
+            ->where('id_user', Auth::user()->id)
+            ->get();
 
         //hitung subtotal barang di keranjang 
         $subtotal = 0;
 
         //buat kode penjualan
-        $kodePenjualan  = date('Y-m-d').'-'.rand();
-        foreach($keranjang as $data){
+        $kodePenjualan  = date('Y-m-d') . '-' . rand();
+        foreach ($keranjang as $data) {
             $subtotal += $data->qty * $data->detail_barang->harga;
 
             // buat array untuk memasukan data keranjang ke detail penjualan
@@ -119,21 +120,20 @@ class PaymentController extends Controller
                 'first_name'   => $request->name,
                 'email'        => $user->email,
                 'phone'        => $request->telp,
-                ],
+            ],
             'vtweb' => []
         );
-        
+
         try {
-          // Get Snap Payment Page URL
-          $paymentUrl = Snap::createTransaction($params)->redirect_url;
+            // Get Snap Payment Page URL
+            $paymentUrl = Snap::createTransaction($params)->redirect_url;
 
-          return redirect($paymentUrl);
+            return redirect($paymentUrl);
 
-          // Redirect to Snap Payment Page
-          header('Location: ' . $paymentUrl);
-        }
-        catch (Exception $e) {
-          echo $e->getMessage();
+            // Redirect to Snap Payment Page
+            header('Location: ' . $paymentUrl);
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -166,16 +166,15 @@ class PaymentController extends Controller
         ];
 
         try {
-          // Get Snap Payment Page URL
-          $paymentUrl = Snap::createTransaction($params)->redirect_url;
+            // Get Snap Payment Page URL
+            $paymentUrl = Snap::createTransaction($params)->redirect_url;
 
-          return redirect($paymentUrl);
+            return redirect($paymentUrl);
 
-          // Redirect to Snap Payment Page
-          header('Location: ' . $paymentUrl);
-        }
-        catch (Exception $e) {
-          echo $e->getMessage();
+            // Redirect to Snap Payment Page
+            header('Location: ' . $paymentUrl);
+        } catch (Exception $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -211,5 +210,56 @@ class PaymentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function notificationCallback()
+    {
+
+        // config midtrans
+        // Set your Merchant Server Key
+        Config::$serverKey = config('midtrans.serverKey');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        Config::$isProduction = config('midtrans.isProduction');
+
+        try {
+            $notif = new Notification();
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
+
+        $notif = $notif->getResponse();
+        $transaction = $notif->transaction_status;
+        $type = $notif->payment_type;
+        $order_id = $notif->order_id;
+        $fraud = $notif->fraud_status;
+
+        if ($transaction == 'capture') {
+            // For credit card transaction, we need to check whether transaction is challenge by FDS or not
+            if ($type == 'credit_card') {
+                if ($fraud == 'challenge') {
+                    // TODO set payment status in merchant's database to 'Challenge by FDS'
+                    // TODO merchant should decide whether this transaction is authorized or not in MAP
+                    echo "Transaction order_id: " . $order_id . " is challenged by FDS";
+                } else {
+                    // TODO set payment status in merchant's database to 'Success'
+                    echo "Transaction order_id: " . $order_id . " successfully captured using " . $type;
+                }
+            }
+        } else if ($transaction == 'settlement') {
+            // TODO set payment status in merchant's database to 'Settlement'
+            echo "Transaction order_id: " . $order_id . " successfully transfered using " . $type;
+        } else if ($transaction == 'pending') {
+            // TODO set payment status in merchant's database to 'Pending'
+            echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
+        } else if ($transaction == 'deny') {
+            // TODO set payment status in merchant's database to 'Denied'
+            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
+        } else if ($transaction == 'expire') {
+            // TODO set payment status in merchant's database to 'expire'
+            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is expired.";
+        } else if ($transaction == 'cancel') {
+            // TODO set payment status in merchant's database to 'Denied'
+            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.";
+        }
     }
 }

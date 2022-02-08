@@ -64,6 +64,15 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('get-cost', [CheckoutController::class, 'get_cost'])->name('get-cost');
 });
 
+// midtrans
+Route::get('midtrans/success', function () {
+    return view('midtrans.success');
+});
+
+Route::get('midtrans/error', function () {
+    return view('midtrans.error');
+});
+
 // jetstream
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
