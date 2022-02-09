@@ -18,6 +18,7 @@ class CreateAlamatPengirimenTable extends Migration
             $table->string('kode_penjualan');
             $table->integer('destination');
             $table->string('courier');
+            $table->integer('origin');
             $table->string('service');
             $table->integer('weight');
             $table->text('alamat');
