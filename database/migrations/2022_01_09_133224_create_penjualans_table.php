@@ -19,6 +19,7 @@ class CreatePenjualansTable extends Migration
             $table->integer('id_user');
             $table->date('tgl');
             $table->integer('ongkir');
+            $table->string('status');
             $table->integer('total');
             $table->timestamps();
         });

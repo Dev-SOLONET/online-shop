@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StokController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\KeranjangController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\User\PaymentController;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +54,7 @@ Route::resource('home', DashboardController::class);
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::resource('keranjang', KeranjangController::class);
     Route::resource('checkout', CheckoutController::class);
+    Route::resource('payment', PaymentController::class);
 
     //get province raja ongkir
     Route::get('get-province', [CheckoutController::class, 'get_province'])->name('get-province');
@@ -60,6 +62,15 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::get('get-city', [CheckoutController::class, 'get_city'])->name('get-city');
     //get cost raja ongkir
     Route::get('get-cost', [CheckoutController::class, 'get_cost'])->name('get-cost');
+});
+
+// midtrans
+Route::get('midtrans/success', function () {
+    return view('midtrans.success');
+});
+
+Route::get('midtrans/error', function () {
+    return view('midtrans.error');
 });
 
 // jetstream

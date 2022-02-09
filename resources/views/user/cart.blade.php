@@ -124,6 +124,7 @@
 
     function edit_cart(id){
         const qty = $('[name="cart_qty"]').val();
+        console.log(qty);
         $.ajax({
             url : "/keranjang/" +id+ "/edit?qty=" +qty,
             type: "GET",

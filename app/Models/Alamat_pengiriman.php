@@ -15,6 +15,7 @@ class Alamat_pengiriman extends Model
         'destination',
         'courier',
         'weight',
+        'service',
         'alamat',
     ];
 

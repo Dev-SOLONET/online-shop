@@ -20,9 +20,9 @@
 <section class="section-b-space">
     <div class="container">
         <div class="checkout-page">
-            <div class="checkout-form">
-                <form action="" method="POST">
-
+            <form method="POST" action="{{ route('payment.store')}}">
+                @csrf
+                <div class="checkout-form">
                     <div class="row">
                         <div class="col-lg-6 col-sm-12 col-xs-12">
                             <div class="checkout-title">
@@ -65,7 +65,7 @@
                                 </div>
                                 <div class="form-group col-md-8 col-sm-12 col-xs-12">
                                     <div class="field-label">Service</div>
-                                    <select name="service" id="service">
+                                    <select name="service" id="service" onchange="get_cost()">
                                         <option disabled selected>-- Pilih Service --</option>
                                     </select>
                                 </div>
@@ -95,19 +95,25 @@
                                     </ul>
                                     <ul class="sub-total">
                                         <input type="hidden" id="subtotal_keranjang" value="{{ $subtotal }}">
-                                        <li>Subtotal <span class="count">Rp. <span id="subtotal_checkout">{{ number_format($subtotal) }}</span></span></li>
+                                        <input type="hidden" name="ongkir" id="ongkir">
+                                        <li>Subtotal <span class="count">Rp. <span id="subtotal_checkout">{{
+                                                    number_format($subtotal) }}</span></span></li>
                                         <li>Ongkir <span class="count">Rp. <span id="total_ongkir">0</span></span></li>
                                     </ul>
                                     <ul class="sub-total">
                                         <li>Total <span class="count">Rp. <span id="total_checkout">0</span></span></li>
                                     </ul>
+
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-solid">Bayar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
         </div>
+        </form>
     </div>
 </section>
 <!-- section end -->
@@ -170,9 +176,13 @@
                 var html = '';
                 var i;
                 for (i = 0; i < data.length; i++) {
-                    html += '<option value=' + data[i].cost[0].value + '>' + data[i].service + ' | ' + data[i].description + ' | Rp.' +data[i].cost[0].value+ '</option>';
+                    html += '<option data-id="'+data[i].cost[0].value+'" value="' + data[i].service + '">' + data[i].service + ' | ' + data[i].description + ' | Rp.' +data[i].cost[0].value+ '</option>';
                 }
                 $('#service').html(html);
+
+                if(data.length == 1){
+                    get_cost();
+                }
 
             }
         });
@@ -180,15 +190,17 @@
         return false;
     });
 
-    $('#service').change(function() {
-        var cost        = $(this).val();
+    function get_cost() {
+        var cost        = $('#service option:selected').data('id');
         var subtotal    = $('#subtotal_keranjang').val();
 
         var totalCheckout = parseInt(cost) + parseInt(subtotal);
         
         $("#total_ongkir").number(cost);
         $("#total_checkout").number(totalCheckout);
-    });
+
+        $('#ongkir').val(cost);
+    };
 
 </script>
 @endsection
