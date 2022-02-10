@@ -26,29 +26,33 @@
                             <div class="invoice-head">
                                 <div class="row">
                                     <div class="iv-left col-6">
-                                        <span>DETAIL PENJUALAN</span>
+                                        <span>KODE PENJUALAN</span>
                                     </div>
                                     <div class="iv-right col-6 text-md-right">
                                         <span>{{ $data->kode_penjualan }}</span>
                                     </div>
                                 </div>
+                                <br>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-md-6">
                                     <div class="invoice-address">
+                                        <p>{{ $data->alamatpengiriman['courier'] }} - {{ $data->alamatpengiriman['service'] }}</p>
                                         <h3>ALAMAT PENGIRIMAN</h3>
-                                        <h5>{{ $data->alamatpengiriman['destination'] }}</h5>
-                                        @if ( $data->alamatpengiriman['courier'] != "" || $data->alamatpengiriman['courier'] != null)
-                                        <p>Telp : {{ $data->alamatpengiriman['courier'] }}</p>
-                                        @endif
-                                        <p>{{ $data->alamatpengiriman['service'] }}</p>
-                                        @if ( $data->alamatpengiriman['alamat'] != "" || $data->alamatpengiriman['alamat'] != null)
-                                        <p>Alamat : {{ $data->alamatpengiriman['alamat'] }}</p>
-                                        @endif
+                                        <h5>{{ $city->rajaongkir->results->city_name }}</h5>
+                                        <p>{{ $data->alamatpengiriman['origin'] }}</p>
+                                        <p>{{ $data->alamatpengiriman['alamat'] }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <div class="invoice-address">
+                                        @if ($data->status == '1')
+                                        <h4><span class="badge badge-primary">Pending</span></h4>
+                                        @elseif ($data->status == '2')
+                                        <h4><span class="badge badge-success">Lunas</span></h4>
+                                        @elseif ($data->status == '3')
+                                        <h4><span class="badge badge-warning">Belum Lunas</span></h4>
+                                        @endif
                                         <p>Tanggal : {{ date('d F Y', strtotime($data->tgl)) }}</p>
                                     </div>
                                 </div>
@@ -57,10 +61,8 @@
                                 <table class="table table-bordered table-hover text-right">
                                     <thead>
                                         <tr class="text-capitalize">
-                                            <th class="text-left">PN</th>
                                             <th class="text-left" style="width: 45%; min-width: 130px;">Barang</th>
                                             <th>Qty</th>
-                                            <th>Status</th>
                                             <th style="min-width: 100px">Harga</th>
                                             <th>Subtotal</th>
                                         </tr>
@@ -69,42 +71,32 @@
                                         @php
                                         $total = 0;
                                         @endphp
-                                        @foreach ($barang as $x)
+                                         @foreach ($detailpenjualan as $x)
                                         <tr>
-                                            <td class="text-left">{{ $x->part_number }}</td>
-                                            <td class="text-left">{{ $x->barang['nama'] }}</td>
+                                            <td class="text-left">{{ $x->barang->nama }}</td>
                                             <td>{{ $x->qty }}</td>
-                                            <td>{{ $x->barang->satuan['nama'] }}</td>
-                                            <td>{{ number_format($x->harga_satuan) }}</td>
-                                            <td>{{ number_format($x->qty * $x->harga_satuan) }}</td>
+                                            <td>{{ number_format($x->harga) }}</td>
+                                            <td>{{ number_format($x->qty * $x->harga) }}</td>
                                         </tr>
                                         @php
-                                        $total += intval($x->qty) * intval($x->harga_satuan);
+                                        $total += intval($x->qty) * intval($x->harga);
                                         @endphp
-                                        @endforeach
+                                       @endforeach
                                     </tbody>
                                     <tfoot>
                                         @if ($data->ppn > 0)
                                         <tr>
-                                            <td class="text-right" colspan="5">
+                                            <td class="text-right" colspan="3">
                                                 <h6>Subtotal :</h6>
                                             </td>
                                             <td>
-                                                <h6>{{ number_format($data->total - $data->ppn - $data->ongkir) }}</h6>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-right" colspan="5">
-                                                <h6>PPN :</h6>
-                                            </td>
-                                            <td>
-                                                <h6>{{ number_format($data->ppn) }}</h6>
+                                                <h6>{{ number_format($total - $data->ongkir) }}</h6>
                                             </td>
                                         </tr>
                                         @endif
                                         @if ($data->ongkir > 0)
                                         <tr>
-                                            <td class="text-right" colspan="5">
+                                            <td class="text-right" colspan="3">
                                                 <h6>Ongkir :</h6>
                                             </td>
                                             <td>
@@ -113,11 +105,11 @@
                                         </tr>
                                         @endif
                                         <tr>
-                                            <td class="text-right" colspan="5">
+                                            <td class="text-right" colspan="3">
                                                 <h6>Total :</h6>
                                             </td>
                                             <td>
-                                                <h6>{{ number_format($data->total) }}</h6>
+                                                <h6>{{ number_format($total + $data->ongkir) }}</h6>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -125,27 +117,9 @@
                             </div>
                         </div>
                         <div class="invoice-buttons text-right">
-                            <a href="{{ route('history-purchase-order.index') }}"
+                            <a href="{{ route('admin.transaksi.index') }}"
                                 class="btn btn-rounded btn-outline-primary float-right"><i class="ti-back-left"> </i>
                                 Kembali</a>
-                            @if ($pembelian)
-
-                            @else
-                            <button onclick="delete_data({{ $data->id }})" class="btn btn-outline-danger float-left"><i
-                                    class="ti-trash"> </i> Hapus
-                                Purhase Order</button>
-                            @endif
-
-                            @if ($data->status == 'open')
-                            <button onclick="edit_data('{{ $data->kode_po }}')" class="btn btn-outline-warning float-left ml-2"><i
-                                class="ti-pencil-alt"> </i> Edit
-                            Purhase Order</button>
-                            @else
-                                
-                            @endif
-
-                            <a href="{{ route('history-purchaseorder.pdf') }}?kode={{ $kode }}" class="invoice-btn"><i
-                                    class="ti-download"></i> Download Purchase Order</a>
                         </div>
                     </div>
                 </div>

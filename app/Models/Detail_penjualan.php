@@ -18,4 +18,8 @@ class Detail_penjualan extends Model
 
     protected $table = 'detail_penjualan';
 
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class,'id_detail_barang');
+    }
 }

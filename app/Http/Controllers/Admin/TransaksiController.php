@@ -11,14 +11,16 @@ use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
+
 
 class TransaksiController extends Controller
 {
     public function index()
     {
-    
+        // $detailpenjualan     = Detail_penjualan::with('barang')->get();
         // $data = Penjualan::with('detailpenjualan','alamatpengiriman')->get();
-        // return $data;
+        // return $detailpenjualan;
         
         //datatable
         if (request()->ajax()) {
@@ -52,22 +54,43 @@ class TransaksiController extends Controller
         ]);
     }
 
+    public function get_city(Request $request){
+
+        $key = config('rajaongkir.key', '');
+
+        $response = Http::get('https://api.rajaongkir.com/starter/city', [
+            'key'          => $key,
+            'province'     => $request->get('province_id')
+        ]);
+
+        $data = json_decode($response, true);
+
+        return $data['rajaongkir']['results'];
+
+    }
+
     function show($id, Request $request)
     {
-        $kode       = $request->get('kode');
-        $po  = Penjualan::with('detailpenjualan','alamatpengiriman')->get();
+        $key = config('rajaongkir.key', '');
 
-        // $po         = Purchase_order::with('distributor')->where('kode_po', $kode)->get();
-        // $pembelian  = Pembelian::select('no_invoice')->where('kode_po', $kode)->first();
+        $response = Http::get('https://api.rajaongkir.com/starter/city', [
+            'key'          => $key,
+            'province'     => '91'
+        ]);
 
-        // $barang     = Detail_purchase_order::with('barang.satuan')->where('kode_po', $kode)->get();
+        $city = json_decode($response, true);
+
+        // return $data['rajaongkir']['results'];
+        
+        $kode                = $request->get('kode');
+        $po                  = Penjualan::with('alamatpengiriman')->where('kode_penjualan', $kode)->get();
+        $detailpenjualan     = Detail_penjualan::with('barang')->where('kode_penjualan', $kode)->get();
 
         return view('admin.transaksi.detail', [
-            'title'     => 'Detail Penjualan',
-            'po'    =>  $po,
-            // 'barang'    =>  $barang,
-            // 'pembelian' =>  $pembelian,
-            'kode'      =>  $kode
+            'title'           => 'Detail Penjualan',
+            'po'              =>  $po,
+            'detailpenjualan' =>  $detailpenjualan,
+            'city'            =>  $city
         ]);
     }
 }
