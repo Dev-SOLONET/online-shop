@@ -151,7 +151,7 @@
         }
         
         function loopCart(item, index) {
-            text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="{{ url("multikart/assets/images/fashion/product/1.jpg") }}"></a><div class="media-body"><a href="#"><h4>'+item.detail_barang.barang.nama+'</h4></a><h4><span>'+item.qty+' x Rp. '+item.detail_barang.harga+'</span></h4></div></div><div class="close-circle"><a href="#"><i onclick="remove_cart('+item.id+')" class="fa fa-times" aria-hidden="true"></i></a></div></li>';
+            text += '<li><div class="media"><a href="#"><img alt="" class="me-3" src="/images/'+item.detail_barang.barang.foto_cover+'"></a><div class="media-body"><a href="#"><h4>'+item.detail_barang.barang.nama+'</h4></a><h4><span>'+item.qty+' x Rp. '+item.detail_barang.harga+'</span></h4></div></div><div class="close-circle"><a href="#"><i onclick="remove_cart('+item.id+')" class="fa fa-times" aria-hidden="true"></i></a></div></li>';
             total += item.detail_barang.harga * item.qty;
         }
 

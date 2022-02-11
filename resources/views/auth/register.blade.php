@@ -23,6 +23,15 @@
             <div class="col-lg-12">
                 <h3>Masukan Data Anda</h3>
                 <div class="theme-card">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form class="theme-form" method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="form-row row">

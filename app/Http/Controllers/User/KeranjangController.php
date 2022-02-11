@@ -33,7 +33,7 @@ class KeranjangController extends Controller
 
                     $actionBtn = '
                             <center>
-                            <img src="/multikart/assets/images/pro3/27.jpg" style="width:50px;">
+                            <img src="/images/'.$row->detail_barang->barang->foto_cover.'" style="width:50px;">
                             </center>';
 
                     return $actionBtn;

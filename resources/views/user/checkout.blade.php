@@ -32,16 +32,16 @@
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Penerima</div>
                                     <input type="text" name="name" value="{{ $user->name }}"
-                                        placeholder="Masukan Nama Penerima">
+                                        placeholder="Masukan Nama Penerima" required>
                                 </div>
                                 <div class="form-group col-md-6 col-sm-6 col-xs-12">
                                     <div class="field-label">Telp</div>
                                     <input type="number" name="telp" value="{{ $user->telp }}"
-                                        placeholder="Masukan No Telp">
+                                        placeholder="Masukan No Telp" required>
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                     <div class="field-label">Provinsi</div>
-                                    <select name="prov" id="prov">
+                                    <select name="prov" id="prov" required>
                                         <option disabled selected>-- Pilih Provinsi --</option>
                                         @foreach ($province as $prov)
                                         <option value="{{ $prov['province_id'] }}">{{ $prov['province'] }}</option>
@@ -50,13 +50,13 @@
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                     <div class="field-label">Kota</div>
-                                    <select name="kota" id="kota">
+                                    <select name="kota" id="kota" required>
 
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4 col-sm-12 col-xs-12">
                                     <div class="field-label">Kurir</div>
-                                    <select name="kurir" id="kurir">
+                                    <select name="kurir" id="kurir" required>
                                         <option disabled selected>-- Pilih Kurir --</option>
                                         <option value="jne">JNE</option>
                                         <option value="pos">POS</option>
@@ -65,13 +65,13 @@
                                 </div>
                                 <div class="form-group col-md-8 col-sm-12 col-xs-12">
                                     <div class="field-label">Service</div>
-                                    <select name="service" id="service" onchange="get_cost()">
+                                    <select name="service" id="service" onchange="get_cost()" required>
                                         <option disabled selected>-- Pilih Service --</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12 col-xs-12">
                                     <div class="field-label">Detail Alamat</div>
-                                    <textarea class="form-control" name="alamat" rows="3"></textarea>
+                                    <textarea class="form-control" name="alamat" rows="3" required></textarea>
                                 </div>
                             </div>
                         </div>
