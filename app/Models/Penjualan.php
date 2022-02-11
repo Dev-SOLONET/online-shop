@@ -20,4 +20,14 @@ class Penjualan extends Model
 
     protected $table = 'penjualan';
 
+    public function detailpenjualan()
+    {
+        return $this->BelongsTo(Detail_penjualan::class,'kode_penjualan','kode_penjualan');
+    }
+
+    public function alamatpengiriman()
+    {
+        return $this->BelongsTo(Alamat_pengiriman::class,'kode_penjualan','kode_penjualan');
+    }
+
 }

@@ -1,17 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Admin\BarangController;
-use App\Http\Controllers\Admin\KategoriController;
-use App\Http\Controllers\Admin\StokController;
-
-use App\Http\Controllers\User\DashboardController;
-use App\Http\Controllers\User\KeranjangController;
-use App\Http\Controllers\User\CheckoutController;
-use App\Http\Controllers\User\PaymentController;
-
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\StokController;
+use App\Http\Controllers\Admin\BarangController;
+
+use App\Http\Controllers\User\PaymentController;
+use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\User\DashboardController;
+
+use App\Http\Controllers\User\KeranjangController;
+use App\Http\Controllers\Admin\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
     Route::resource('barang', BarangController::class);
     Route::resource('stok', StokController::class);
     Route::resource('kategori', KategoriController::class);
+    Route::resource('transaksi', TransaksiController::class);
+
+    Route::get('get-city', [TransaksiController::class, 'get_city'])->name('get-city');
+
 });
 
 //role user
