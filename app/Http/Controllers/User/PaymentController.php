@@ -55,7 +55,7 @@ class PaymentController extends Controller
         $subtotal = 0;
 
         //buat kode penjualan
-        $kodePenjualan  = date('Y-m-d') . '-' . rand();
+        $kodePenjualan  = date('Ymd') . '-' . rand();
         foreach ($keranjang as $data) {
             $subtotal += $data->qty * $data->detail_barang->harga;
 
@@ -80,7 +80,7 @@ class PaymentController extends Controller
             'id_user'           => Auth::user()->id,
             'ongkir'            => $request->ongkir,
             'total'             => $subtotal + $request->ongkir,
-            'status'            => '',
+            'status'            => 'waiting',
         ]);
 
         //simpan alamat pengiriman
@@ -132,7 +132,7 @@ class PaymentController extends Controller
 
             // Redirect to Snap Payment Page
             header('Location: ' . $paymentUrl);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
@@ -145,37 +145,7 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        // config midtrans
-        // Set your Merchant Server Key
-        Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        Config::$isProduction = config('midtrans.isProduction');
-        // Set sanitization on (default)
-        Config::$isSanitized = config('midtrans.isSanitized');
-        // Set 3DS transaction for credit card to true
-        Config::$is3ds = config('midtrans.is3ds');
-
-        //buat parameter yg akan di kirimkan ke midtrans
-        $params = [
-            'transaction_details' => [
-                'order_id'      => rand(),
-                'gross_amount'  => 10000000,
-            ],
-            'enabled_payments'  => ['gopay'],
-            'vtweb' => []
-        ];
-
-        try {
-            // Get Snap Payment Page URL
-            $paymentUrl = Snap::createTransaction($params)->redirect_url;
-
-            return redirect($paymentUrl);
-
-            // Redirect to Snap Payment Page
-            header('Location: ' . $paymentUrl);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
+        
     }
 
     /**
@@ -214,7 +184,6 @@ class PaymentController extends Controller
 
     public function notificationCallback()
     {
-
         // config midtrans
         // Set your Merchant Server Key
         Config::$serverKey = config('midtrans.serverKey');
@@ -239,27 +208,45 @@ class PaymentController extends Controller
                 if ($fraud == 'challenge') {
                     // TODO set payment status in merchant's database to 'Challenge by FDS'
                     // TODO merchant should decide whether this transaction is authorized or not in MAP
-                    echo "Transaction order_id: " . $order_id . " is challenged by FDS";
+                    // echo "Transaction order_id: " . $order_id . " is challenged by FDS";
+                    $status = 'settlement';
                 } else {
                     // TODO set payment status in merchant's database to 'Success'
-                    echo "Transaction order_id: " . $order_id . " successfully captured using " . $type;
+                    // echo "Transaction order_id: " . $order_id . " successfully captured using " . $type;
+                    $status = 'settlement';
                 }
             }
         } else if ($transaction == 'settlement') {
             // TODO set payment status in merchant's database to 'Settlement'
-            echo "Transaction order_id: " . $order_id . " successfully transfered using " . $type;
+            // echo "Transaction order_id: " . $order_id . " successfully transfered using " . $type;
+            $status = 'settlement';
         } else if ($transaction == 'pending') {
             // TODO set payment status in merchant's database to 'Pending'
-            echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
+            // echo "Waiting customer to finish transaction order_id: " . $order_id . " using " . $type;
+            $status = 'pending';
+
         } else if ($transaction == 'deny') {
             // TODO set payment status in merchant's database to 'Denied'
-            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
+            // echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is denied.";
+            $status = 'deny';
+
         } else if ($transaction == 'expire') {
             // TODO set payment status in merchant's database to 'expire'
-            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is expired.";
+            // echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is expired.";
+            $status = 'expire';
+
         } else if ($transaction == 'cancel') {
             // TODO set payment status in merchant's database to 'Denied'
-            echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.";
+            // echo "Payment using " . $type . " for transaction order_id: " . $order_id . " is canceled.";
+            $status = 'cancel';
         }
+
+        // update status penjualan
+        $data = Penjualan::where('kode_penjualan', $order_id)->update([
+            'status'    => $status
+        ]);
+
+        return response()->json($data);
+
     }
 }
