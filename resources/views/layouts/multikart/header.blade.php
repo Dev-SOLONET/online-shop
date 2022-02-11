@@ -19,7 +19,6 @@
                             {{ Auth::user()->name }}
                             <ul class="onhover-show-div">
                                 <li><a href="/user/profile">Profile</a></li>
-                                <li><a href="{{ route('login') }}">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
