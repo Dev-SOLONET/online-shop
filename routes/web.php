@@ -48,6 +48,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
     Route::resource('stok', StokController::class);
     Route::resource('kategori', KategoriController::class);
     Route::resource('transaksi', TransaksiController::class);
+
+    Route::get('get-city', [TransaksiController::class, 'get_city'])->name('get-city');
+
 });
 
 //role user

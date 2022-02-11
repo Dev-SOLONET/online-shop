@@ -90,10 +90,10 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'kode_penjualan', name: 'kode_penjualan'},
-                {data: 'tgl', name: 'tgl'},
-                {data: 'ongkir', name: 'ongkir'},
+                {data: 'tanggal', name: 'tanggal'},
+                {data: 'total_ongkir', name: 'total_ongkir'},
                 {data: 'status', name: 'status'},
-                {data: 'total', name: 'total'},
+                {data: 'total_nominal', name: 'total_nominal'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
               ]
             });

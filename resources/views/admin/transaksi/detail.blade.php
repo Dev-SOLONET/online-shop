@@ -26,10 +26,10 @@
                             <div class="invoice-head">
                                 <div class="row">
                                     <div class="iv-left col-6">
-                                        <span>KODE PENJUALAN</span>
+                                        <h3>KODE PENJUALAN</h3>
                                     </div>
                                     <div class="iv-right col-6 text-md-right">
-                                        <span>{{ $data->kode_penjualan }}</span>
+                                        <h3>{{ $data->kode_penjualan }}</h3>
                                     </div>
                                 </div>
                                 <br>
@@ -38,10 +38,10 @@
                                 <div class="col-md-6">
                                     <div class="invoice-address">
                                         <p>{{ $data->alamatpengiriman['courier'] }} - {{ $data->alamatpengiriman['service'] }}</p>
-                                        <h3>ALAMAT PENGIRIMAN</h3>
-                                        <h5>{{ $city->rajaongkir->results->city_name }}</h5>
-                                        <p>{{ $data->alamatpengiriman['origin'] }}</p>
-                                        <p>{{ $data->alamatpengiriman['alamat'] }}</p>
+                                        {{-- <h3>ALAMAT PENGIRIMAN</h3> --}}
+                                        <p>Dari   : {{ $hasilasal['rajaongkir']['results']['city_name'] }}</p>
+                                        <p>Tujuan :{{ $city['rajaongkir']['results']['city_name'] }}</p>
+                                        <p>Alamat : {{ $data->alamatpengiriman['alamat'] }}</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6 text-right">

@@ -27,6 +27,15 @@ class TransaksiController extends Controller
         $data = Penjualan::with('detailpenjualan','alamatpengiriman')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('tanggal', function ($row) {
+                    return date("d F Y", strtotime($row->tgl));
+                })
+                ->addColumn('total_nominal', function ($row) {
+                    return number_format($row->total);
+                })
+                ->addColumn('total_ongkir', function ($row) {
+                    return number_format($row->ongkir);
+                })
                 ->addColumn('price', function ($row) {
                     $actionBtn = number_format($row->harga);
 
@@ -71,26 +80,50 @@ class TransaksiController extends Controller
 
     function show($id, Request $request)
     {
-        $key = config('rajaongkir.key', '');
-
-        $response = Http::get('https://api.rajaongkir.com/starter/city', [
-            'key'          => $key,
-            'province'     => '91'
-        ]);
-
-        $city = json_decode($response, true);
+       
 
         // return $data['rajaongkir']['results'];
         
         $kode                = $request->get('kode');
         $po                  = Penjualan::with('alamatpengiriman')->where('kode_penjualan', $kode)->get();
         $detailpenjualan     = Detail_penjualan::with('barang')->where('kode_penjualan', $kode)->get();
+        // $alamat              = Alamat_pengiriman::select('destination')->where('kode_penjualan', $kode)->get();
+
+        $alamat   = DB::table('alamat_pengiriman')
+                    ->select('destination')
+                    ->where('kode_penjualan', $kode)
+                    ->first();
+        
+        $asal   = DB::table('alamat_pengiriman')
+                    ->select('origin')
+                    ->where('kode_penjualan', $kode)
+                    ->first();
+
+        $key = config('rajaongkir.key', '');
+
+        $response = Http::get('https://api.rajaongkir.com/starter/city', [
+            'key'          => $key,
+            'id'           => $alamat->destination
+        ]);
+
+        $city = json_decode($response, true);
+
+
+        $responseasal = Http::get('https://api.rajaongkir.com/starter/city', [
+            'key'          => $key,
+            'id'           => $asal->origin
+        ]);
+
+        $hasilasal = json_decode($responseasal, true);
+
+        // return $city;
 
         return view('admin.transaksi.detail', [
             'title'           => 'Detail Penjualan',
             'po'              =>  $po,
             'detailpenjualan' =>  $detailpenjualan,
-            'city'            =>  $city
+            'city'            =>  $city,
+            'hasilasal'       =>  $hasilasal
         ]);
     }
 }
